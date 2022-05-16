@@ -161,24 +161,26 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
     });
   }
 
-  Future<T> onLoading(Future<T> Function() asyncFunction) async {
+  Future<T> onLoading(Future<T> Function() asyncFunction, {Widget? loadingWidget, Color opacityColor = Colors.black, double? opacity}) async {
     return Get.showOverlay(
       asyncFunction: asyncFunction,
-      opacity: .1,
-      loadingWidget: Center(
-        child: Container(
-          width: 120,
-          height: 120,
-          decoration: BoxDecoration(color: Colors.white.withOpacity(.4), borderRadius: BorderRadius.circular(10)),
-          child: const SizedBox(
-            width: 50,
-            height: 50,
-            child: Center(
-              child: CircularProgressIndicator(strokeWidth: 20),
+      opacityColor: opacityColor,
+      opacity: opacity ?? .1,
+      loadingWidget: loadingWidget ??
+          Center(
+            child: Container(
+              width: 120,
+              height: 120,
+              decoration: BoxDecoration(color: Colors.white.withOpacity(.4), borderRadius: BorderRadius.circular(10)),
+              child: const SizedBox(
+                width: 50,
+                height: 50,
+                child: Center(
+                  child: CircularProgressIndicator(strokeWidth: 20),
+                ),
+              ),
             ),
           ),
-        ),
-      ),
     );
   }
 
