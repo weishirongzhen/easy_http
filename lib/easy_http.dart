@@ -3,6 +3,7 @@ library easy_http;
 import 'package:easy_http/config/base_easy_http_config.dart';
 import 'package:easy_http/easy_http.dart';
 import 'package:get/get_connect/http/src/interceptors/get_modifiers.dart';
+import 'package:get/get_connect/http/src/request/request.dart';
 
 export 'package:get/get.dart';
 
@@ -23,6 +24,16 @@ class EasyHttp extends GetConnect {
   static List<ResponseModifier> get responseInterceptor => _responseInterceptor;
 
   static BaseEasyHttpConfig get config => _config;
+
+  @override
+  void onInit() {
+    for (RequestModifier request in EasyHttp.requestInterceptor) {
+      httpClient.addRequestModifier(request);
+    }
+    for (ResponseModifier response in EasyHttp.responseInterceptor) {
+      httpClient.addResponseModifier(response);
+    }
+  }
 
   static init({required BaseEasyHttpConfig config}) async {
     await config.init();
