@@ -2,7 +2,7 @@ name: easy_http
 description: A Flutter Http lib for easy cache and update UI bind with Getx.
 version: 0.0.2
 homepage: https://github.com/weishirongzhen/easy_http.git
-publish_to: https://pub.dev
+#publish_to: https://pub.dev
 
 environment:
   sdk: ">=2.16.2 <3.0.0"
@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  get: 4.6.1
+  get: ^4.6.1
   get_storage: ^2.0.3
 
 dev_dependencies:
