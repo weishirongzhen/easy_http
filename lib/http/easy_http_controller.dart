@@ -1,4 +1,5 @@
-import 'package:easy_http/easy_http_snackbar.dart';
+import 'dart:developer';
+
 import 'package:easy_http/http/easy_http_connect.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -187,6 +188,6 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
   void onSuccess() {}
 
   void onError([String? message]) {
-    easyHttpSnackBar(message ?? "未知错误");
+    log(message??"error");
   }
 }
