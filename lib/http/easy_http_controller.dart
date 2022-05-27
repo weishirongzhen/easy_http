@@ -47,6 +47,8 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
         );
         if (!response.isOk) {
           onError("${response.request?.url} ${response.statusText} \n${response.body}");
+        } else {
+          onSuccess();
         }
       } catch (e, _) {
         onError(e.toString());
@@ -74,6 +76,8 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
 
         if (!response.isOk) {
           onError("${response.request?.url} ${response.statusText} \n${response.body}");
+        } else {
+          onSuccess();
         }
       } catch (e, _) {
         onError(e.toString());
@@ -101,6 +105,8 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
 
         if (!response.isOk) {
           onError("${response.request?.url} ${response.statusText} \n${response.body}");
+        } else {
+          onSuccess();
         }
       } catch (e, _) {
         onError(e.toString());
@@ -128,6 +134,8 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
 
         if (!response.isOk) {
           onError("${response.request?.url} ${response.statusText} \n${response.body}");
+        } else {
+          onSuccess();
         }
       } catch (e, _) {
         onError(e.toString());
@@ -153,6 +161,8 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
 
         if (!response.isOk) {
           onError("${response.request?.url} ${response.statusText} \n${response.body}");
+        } else {
+          onSuccess();
         }
       } catch (e, _) {
         onError(e.toString());
@@ -188,6 +198,6 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
   void onSuccess() {}
 
   void onError([String? message]) {
-    log(message??"error");
+    log(message ?? "error");
   }
 }
