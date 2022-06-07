@@ -123,4 +123,8 @@ class EasyHttp extends GetConnect {
       decoder: decoder,
     );
   }
+
+  static void registerToGet(Function(EasyHttp instance ) register) {
+    register.call(_instance!);
+  }
 }
