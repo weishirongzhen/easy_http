@@ -37,6 +37,7 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
     String? contentType,
     Map<String, dynamic>? query,
   }) async {
+    log("request query  = ${query.toString()}");
     return onLoading(() async {
       try {
         final response = await _httpClient.get(
@@ -64,6 +65,7 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
     Map<String, String>? headers,
     Map<String, dynamic>? query,
   }) async {
+    log("request body  = ${body.toString()}");
     return onLoading(() async {
       try {
         final response = await _httpClient.post(
