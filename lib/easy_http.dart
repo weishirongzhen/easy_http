@@ -1,5 +1,7 @@
 library easy_http;
 
+import 'dart:developer';
+
 import 'package:easy_http/config/base_easy_http_config.dart';
 import 'package:easy_http/easy_http.dart';
 import 'package:get/get_connect/http/src/interceptors/get_modifiers.dart';
@@ -56,6 +58,7 @@ class EasyHttp extends GetConnect {
     Decoder<T>? decoder,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
+    log("request query = " + query.toString());
     return _instance!.get(
       url,
       headers: headers,
@@ -75,6 +78,7 @@ class EasyHttp extends GetConnect {
     Progress? uploadProgress,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
+    log("request body = " + body.toString());
     return _instance!.post(
       url,
       body,
