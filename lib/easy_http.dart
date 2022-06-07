@@ -40,11 +40,6 @@ class EasyHttp extends GetConnect {
     _instance ??= EasyHttp._(config);
   }
 
-  static EasyHttp get instance {
-    if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
-    return _instance!;
-  }
-
   static addRequestModifier(RequestModifier interceptor) {
     _requestInterceptor.add(interceptor);
   }
@@ -60,6 +55,7 @@ class EasyHttp extends GetConnect {
     Map<String, dynamic>? query,
     Decoder<T>? decoder,
   }) {
+    if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
     return _instance!.get(
       url,
       headers: headers,
@@ -78,6 +74,7 @@ class EasyHttp extends GetConnect {
     Decoder<T>? decoder,
     Progress? uploadProgress,
   }) {
+    if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
     return _instance!.post(
       url,
       body,
@@ -98,6 +95,7 @@ class EasyHttp extends GetConnect {
     Decoder<T>? decoder,
     Progress? uploadProgress,
   }) {
+    if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
     return _instance!.put(
       url,
       body,
@@ -116,6 +114,7 @@ class EasyHttp extends GetConnect {
     Map<String, dynamic>? query,
     Decoder<T>? decoder,
   }) {
+    if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
     return _instance!.delete(
       url,
       headers: headers,
