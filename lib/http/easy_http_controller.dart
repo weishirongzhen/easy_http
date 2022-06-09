@@ -1,8 +1,7 @@
 import 'dart:developer';
 
+import 'package:easy_http/easy_http.dart';
 import 'package:easy_http/http/easy_http_connect.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
   T get initHttpResponseData;
@@ -36,8 +35,11 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
     Map<String, String>? headers,
     String? contentType,
     Map<String, dynamic>? query,
+    bool showDefaultLoading = true,
   }) async {
-    log("request query  = ${query.toString()}");
+    if (EasyHttp.config.showLog) {
+      log("request query = ${query.toString()}");
+    }
     return onLoading(() async {
       try {
         final response = await _httpClient.get(
@@ -64,8 +66,11 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
+    bool showDefaultLoading = true,
   }) async {
-    log("request body  = ${body.toString()}");
+    if (EasyHttp.config.showLog) {
+      log("request body = ${body.toString()}");
+    }
     return onLoading(() async {
       try {
         final response = await _httpClient.post(
@@ -94,6 +99,7 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
+    bool showDefaultLoading = true,
   }) async {
     return onLoading(() async {
       try {
@@ -123,6 +129,7 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
+    bool showDefaultLoading = true,
   }) async {
     return onLoading(() async {
       try {
@@ -151,6 +158,7 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
+    bool showDefaultLoading = true,
   }) async {
     return onLoading(() async {
       try {
@@ -174,25 +182,16 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
     });
   }
 
-  Future<T> onLoading(Future<T> Function() asyncFunction) async {
-    return Get.showOverlay(
-      asyncFunction: asyncFunction,
-      opacity: .1,
-      loadingWidget: Center(
-        child: Container(
-          width: 120,
-          height: 120,
-          decoration: BoxDecoration(color: Colors.white.withOpacity(.4), borderRadius: BorderRadius.circular(10)),
-          child: const SizedBox(
-            width: 50,
-            height: 50,
-            child: Center(
-              child: CircularProgressIndicator(strokeWidth: 2),
-            ),
-          ),
-        ),
-      ),
-    );
+  Future<T> onLoading(Future<T> Function() asyncFunction, {bool showDefaultLoading = true}) async {
+    if (showDefaultLoading) {
+      return Get.showOverlay(
+        asyncFunction: asyncFunction,
+        opacity: .1,
+        loadingWidget: EasyHttp.config.loadingWidget,
+      );
+    } else {
+      return asyncFunction();
+    }
   }
 
   void onEmpty() {}
@@ -200,6 +199,8 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
   void onSuccess() {}
 
   void onError([String? message]) {
-    log(message ?? "error");
+    if (EasyHttp.config.showLog) {
+      log(message ?? "error");
+    }
   }
 }

@@ -56,16 +56,22 @@ class EasyHttp extends GetConnect {
     String? contentType,
     Map<String, dynamic>? query,
     Decoder<T>? decoder,
+    bool showDefaultLoading = true,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
-    log("request query = " + query.toString());
-    return _instance!.get(
-      url,
-      headers: headers,
-      contentType: contentType,
-      query: query,
-      decoder: decoder,
-    );
+    if (EasyHttp.config.showLog) {
+      log("request query = $url $query");
+    }
+
+    return _onLoading(() async {
+      return _instance!.get(
+        url,
+        headers: headers,
+        contentType: contentType,
+        query: query,
+        decoder: decoder,
+      );
+    }, showDefaultLoading: showDefaultLoading);
   }
 
   static Future<Response<T>> doPost<T>(
@@ -76,18 +82,23 @@ class EasyHttp extends GetConnect {
     Map<String, dynamic>? query,
     Decoder<T>? decoder,
     Progress? uploadProgress,
+    bool showDefaultLoading = true,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
-    log("request body = " + body.toString());
-    return _instance!.post(
-      url,
-      body,
-      contentType: contentType,
-      headers: headers,
-      query: query,
-      decoder: decoder,
-      uploadProgress: uploadProgress,
-    );
+    if (EasyHttp.config.showLog) {
+      log("request url = $url,  body = $body");
+    }
+    return _onLoading(() async {
+      return _instance!.post(
+        url,
+        body,
+        contentType: contentType,
+        headers: headers,
+        query: query,
+        decoder: decoder,
+        uploadProgress: uploadProgress,
+      );
+    }, showDefaultLoading: showDefaultLoading);
   }
 
   static Future<Response<T>> doPut<T>(
@@ -98,17 +109,20 @@ class EasyHttp extends GetConnect {
     Map<String, dynamic>? query,
     Decoder<T>? decoder,
     Progress? uploadProgress,
+    bool showDefaultLoading = true,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
-    return _instance!.put(
-      url,
-      body,
-      contentType: contentType,
-      headers: headers,
-      query: query,
-      decoder: decoder,
-      uploadProgress: uploadProgress,
-    );
+    return _onLoading(() async {
+      return _instance!.put(
+        url,
+        body,
+        contentType: contentType,
+        headers: headers,
+        query: query,
+        decoder: decoder,
+        uploadProgress: uploadProgress,
+      );
+    }, showDefaultLoading: showDefaultLoading);
   }
 
   static Future<Response<T>> doDelete<T>(
@@ -117,18 +131,33 @@ class EasyHttp extends GetConnect {
     String? contentType,
     Map<String, dynamic>? query,
     Decoder<T>? decoder,
+    bool showDefaultLoading = true,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
-    return _instance!.delete(
-      url,
-      headers: headers,
-      contentType: contentType,
-      query: query,
-      decoder: decoder,
-    );
+    return _onLoading(() async {
+      return _instance!.delete(
+        url,
+        headers: headers,
+        contentType: contentType,
+        query: query,
+        decoder: decoder,
+      );
+    }, showDefaultLoading: showDefaultLoading);
   }
 
-  static void registerToGet(Function(EasyHttp instance ) register) {
+  static void registerToGet(Function(EasyHttp instance) register) {
     register.call(_instance!);
+  }
+
+  static Future<Response<T>> _onLoading<T>(Future<Response<T>> Function() asyncFunction, {bool showDefaultLoading = true}) async {
+    if (showDefaultLoading) {
+      return Get.showOverlay(
+        asyncFunction: asyncFunction,
+        opacity: .1,
+        loadingWidget: EasyHttp.config.loadingWidget,
+      );
+    } else {
+      return asyncFunction();
+    }
   }
 }
