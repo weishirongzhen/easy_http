@@ -58,7 +58,7 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
         rethrow;
       }
       return httpData;
-    });
+    }, showDefaultLoading: showDefaultLoading);
   }
 
   Future<T> post(
@@ -91,7 +91,7 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
         rethrow;
       }
       return httpData;
-    });
+    }, showDefaultLoading: showDefaultLoading);
   }
 
   Future<T> put(
@@ -121,7 +121,7 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
         rethrow;
       }
       return httpData;
-    });
+    }, showDefaultLoading: showDefaultLoading);
   }
 
   Future<T> patch(
@@ -151,7 +151,7 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
         rethrow;
       }
       return httpData;
-    });
+    }, showDefaultLoading: showDefaultLoading);
   }
 
   Future<T> delete({
@@ -179,7 +179,7 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
         rethrow;
       }
       return httpData;
-    });
+    }, showDefaultLoading: showDefaultLoading);
   }
 
   Future<T> onLoading(Future<T> Function() asyncFunction, {bool showDefaultLoading = true}) async {
