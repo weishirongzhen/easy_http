@@ -24,9 +24,12 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
 
   @override
   void onInit() {
-    _httpClient = Get.put(
-      EasyHttpConnect<T>(initHttpResponseData, localCacheKey: localCacheKey),
-    );
+    //如此初始化会导致相同controller 不同tag的时候， localCacheKey 有问题，换成如下普通的方式
+    // _httpClient = Get.put(
+    //   EasyHttpConnect<T>(initHttpResponseData, localCacheKey: localCacheKey),
+    // );
+    _httpClient = EasyHttpConnect<T>(initHttpResponseData, localCacheKey: localCacheKey);
+    _httpClient.onInit();
 
     super.onInit();
   }
