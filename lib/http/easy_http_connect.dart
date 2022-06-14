@@ -1,16 +1,16 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:easy_http/easy_http.dart';
-import 'package:get/get_connect/http/src/interceptors/get_modifiers.dart';
-import 'package:get/get_connect/http/src/request/request.dart';
+import 'package:dio/dio.dart';
+import 'package:easy_http/easy_http.dart' hide Response;
 
-class EasyHttpConnect<T> extends GetConnect {
+class EasyHttpClient<T> {
   /// http response init data, use for initial _httpData obs value
   final T initData;
 
   /// leave empty will disable local cache
   final String localCacheKey;
+  final int timeout;
 
   late final Rx<T> _httpData = Rx<T>(initData);
 
@@ -18,55 +18,47 @@ class EasyHttpConnect<T> extends GetConnect {
 
   Rx<T> get obsHttpData => _httpData;
 
+  late Dio dio;
 
-  EasyHttpConnect(this.initData, {this.localCacheKey = ""});
 
-  @override
-  Duration get timeout => const Duration(seconds: 10);
+  EasyHttpClient(this.initData, {this.localCacheKey = "", this.timeout = 100000}) {
+    dio = Dio();
+    dio.options.connectTimeout = timeout;
+    dio.options.receiveTimeout = timeout;
+    dio.interceptors.clear();
+    dio.interceptors.addAll(EasyHttp.interceptor);
 
-  @override
-  void onInit() {
-    httpClient.defaultDecoder = EasyHttp.config.cacheSerializer;
-    httpClient.errorSafety = false;
-    httpClient.timeout = timeout;
-    for (RequestModifier request in EasyHttp.requestInterceptor) {
-      httpClient.addRequestModifier(request);
-
-    }
-    for (ResponseModifier response in EasyHttp.responseInterceptor) {
-      httpClient.addResponseModifier(response);
-    }
-
-    httpClient.addRequestModifier((Request request) {
+    dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
       if (localCacheKey.isNotEmpty) {
         final cache = EasyHttp.config.cacheRunner.readCache<T>(localCacheKey);
         if (cache != null) {
-          log("Found cache  ${T.toString()} request url = ${request.url.toString()}");
+          log("Found cache  ${T.toString()} request url = ${options.uri}");
           _httpData.value = cache;
         } else {
-          log("Cache Not Found  ${T.toString()} request url = ${request.url.toString()}");
+          log("Cache Not Found  ${T.toString()} request url = ${options.uri}");
         }
       }
+      return handler.next(options);
+    }, onResponse: (response, handler) {
+      log("request = ${response.realUri} response = ${jsonEncode(response.data)}");
 
-      return request;
-    });
-
-    httpClient.addResponseModifier((request, response) {
-      log("request = ${request.url.toString()} response = ${jsonEncode(response.body)}");
-
-      if (response.isOk) {
+      if (response.data != null) {
         try {
-          _httpData.value = EasyHttp.config.cacheSerializer<T>(response.body) ?? initData;
+          _httpData.value = EasyHttp.config.cacheSerializer<T>(response.data) ?? initData;
           if (localCacheKey.isNotEmpty) {
             EasyHttp.config.cacheRunner.writeCache(localCacheKey, _httpData.value);
-            log("Updated Cache ${T.toString()} request url = ${request.url.toString()}");
+            log("Updated Cache ${T.toString()} request url = ${response.realUri}");
           }
         } catch (e, s) {
-          log("cacheSerializer error by type ${T.toString()}  request url = ${request.url.toString()}}", error: e, stackTrace: s);
+          log("cacheSerializer error by type ${T.toString()}  request url = ${response.realUri}}", error: e, stackTrace: s);
         }
       }
+      return handler.next(response); // continue
+    }, onError: (DioError e, handler) {
+      return handler.next(e); //continue
+    }));
 
-      return response;
-    });
   }
+
+
 }

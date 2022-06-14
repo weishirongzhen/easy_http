@@ -8,8 +8,6 @@ abstract class BaseEasyHttpConfig {
 
   Widget get loadingWidget;
 
-  bool get showLog;
-
   Future<void> init();
 
 }

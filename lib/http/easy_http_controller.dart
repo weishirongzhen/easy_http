@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:easy_http/easy_http.dart';
 import 'package:easy_http/http/easy_http_connect.dart';
@@ -6,9 +5,9 @@ import 'package:easy_http/http/easy_http_connect.dart';
 abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
   T get initHttpResponseData;
 
-  late EasyHttpConnect<T> _httpClient;
+  late EasyHttpClient<T> _httpClient;
 
-  EasyHttpConnect<T> get httpClient => _httpClient;
+  EasyHttpClient<T> get httpClient => _httpClient;
 
   late final Rx<T> _httpData = _httpClient.obsHttpData;
 
@@ -18,18 +17,15 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
 
   String get localCacheKey => "";
 
+  int get timeout => 100000;
+
   String get requestUrl;
 
   bool get needAuthorized => true;
 
   @override
   void onInit() {
-    //如此初始化会导致相同controller 不同tag的时候， localCacheKey 有问题，换成如下普通的方式
-    // _httpClient = Get.put(
-    //   EasyHttpConnect<T>(initHttpResponseData, localCacheKey: localCacheKey),
-    // );
-    _httpClient = EasyHttpConnect<T>(initHttpResponseData, localCacheKey: localCacheKey);
-    _httpClient.onInit();
+    _httpClient = EasyHttpClient<T>(initHttpResponseData, localCacheKey: localCacheKey, timeout: timeout);
 
     super.onInit();
   }
@@ -40,19 +36,15 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
     Map<String, dynamic>? query,
     bool showDefaultLoading = true,
   }) async {
-    if (EasyHttp.config.showLog) {
-      log("request query = ${query.toString()}");
-    }
     return onLoading(() async {
       try {
-        final response = await _httpClient.get(
+        final response = await _httpClient.dio.get(
           requestUrl,
-          headers: headers,
-          contentType: contentType,
-          query: query,
+          options: Options(headers: headers, contentType: contentType),
+          queryParameters: query,
         );
-        if (!response.isOk) {
-          onError("${response.request?.url} ${response.statusText} \n${response.body}");
+        if (response.data == null) {
+          onError("${response.realUri} ${response.statusMessage}");
         } else {
           onSuccess();
         }
@@ -71,21 +63,17 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
     Map<String, dynamic>? query,
     bool showDefaultLoading = true,
   }) async {
-    if (EasyHttp.config.showLog) {
-      log("request body = ${body.toString()}");
-    }
     return onLoading(() async {
       try {
-        final response = await _httpClient.post(
+        final response = await _httpClient.dio.post(
           requestUrl,
-          body,
-          contentType: contentType,
-          headers: headers,
-          query: query,
+          data: body,
+          queryParameters: query,
+          options: Options(headers: headers, contentType: contentType),
         );
 
-        if (!response.isOk) {
-          onError("${response.request?.url} ${response.statusText} \n${response.body}");
+        if (response.data == null) {
+          onError("${response.realUri} ${response.statusMessage}");
         } else {
           onSuccess();
         }
@@ -106,16 +94,15 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
   }) async {
     return onLoading(() async {
       try {
-        final response = await _httpClient.put(
+        final response = await _httpClient.dio.put(
           requestUrl,
-          body,
-          contentType: contentType,
-          headers: headers,
-          query: query,
+          data: body,
+          options: Options(headers: headers, contentType: contentType),
+          queryParameters: query,
         );
 
-        if (!response.isOk) {
-          onError("${response.request?.url} ${response.statusText} \n${response.body}");
+        if (response.data == null) {
+          onError("${response.realUri} ${response.statusMessage}");
         } else {
           onSuccess();
         }
@@ -136,16 +123,15 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
   }) async {
     return onLoading(() async {
       try {
-        final response = await _httpClient.patch(
+        final response = await _httpClient.dio.patch(
           requestUrl,
-          body,
-          contentType: contentType,
-          headers: headers,
-          query: query,
+          data: body,
+          options: Options(headers: headers, contentType: contentType),
+          queryParameters: query,
         );
 
-        if (!response.isOk) {
-          onError("${response.request?.url} ${response.statusText} \n${response.body}");
+        if (response.data == null) {
+          onError("${response.realUri} ${response.statusMessage}");
         } else {
           onSuccess();
         }
@@ -165,15 +151,14 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
   }) async {
     return onLoading(() async {
       try {
-        final response = await _httpClient.delete(
+        final response = await _httpClient.dio.delete(
           requestUrl,
-          headers: headers,
-          query: query,
-          contentType: contentType,
+          queryParameters: query,
+          options: Options(headers: headers, contentType: contentType),
         );
 
-        if (!response.isOk) {
-          onError("${response.request?.url} ${response.statusText} \n${response.body}");
+        if (response.data == null) {
+          onError("${response.realUri} ${response.statusMessage}");
         } else {
           onSuccess();
         }
@@ -201,9 +186,5 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
 
   void onSuccess() {}
 
-  void onError([String? message]) {
-    if (EasyHttp.config.showLog) {
-      log(message ?? "error");
-    }
-  }
+  void onError([String? message]) {}
 }

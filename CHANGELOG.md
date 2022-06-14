@@ -1,7 +1,40 @@
+## 0.0.19
+
+* bug fixed
+
+## 0.0.18
+
+* bug fixed
+
+## 0.0.17
+
+* bug fixed
+
+## 0.0.16
+
+* bug fixed
+
+## 0.0.15
+
+* bug fixed
+
+## 0.0.14
+
+* bug fixed
+
+## 0.0.13
+
+* bug fixed
+
+## 0.0.12
+
+* replace http client to dio
+
+
 ## 0.0.11
 
 * update
-*
+
 
 ## 0.0.10
 
