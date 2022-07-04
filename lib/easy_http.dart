@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:easy_http/config/base_easy_http_config.dart';
 import 'package:get/get.dart' hide Response;
 
-export 'package:get/get.dart' hide  FormData, MultipartFile, Response;
+export 'package:get/get.dart' hide FormData, MultipartFile, Response;
 export 'package:dio/dio.dart';
 
 class EasyHttp {
@@ -46,15 +46,18 @@ class EasyHttp {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
 
     return _onLoading(() async {
-      final res = await _dio.get(
-        url,
-        options: Options(
-          headers: headers,
-          contentType: contentType,
-        ),
-        queryParameters: query
-      );
-      return T.toString() == "dynamic" ? res.data :EasyHttp.config.cacheSerializer<T>(res.data) ;
+      try {
+        final res = await _dio.get(url,
+            options: Options(
+              headers: headers,
+              contentType: contentType,
+            ),
+            queryParameters: query);
+
+        return T.toString() == "dynamic" ? res.data : EasyHttp.config.cacheSerializer<T>(res.data);
+      } catch (e) {
+        rethrow;
+      }
     }, showDefaultLoading: showDefaultLoading);
   }
 
@@ -68,13 +71,12 @@ class EasyHttp {
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
     return _onLoading(() async {
-      final res = await _dio.post(
-        url,
-        data: body,
-        options: Options(headers: headers, contentType: contentType),
-        queryParameters: query
-      );
-      return T.toString() == "dynamic" ? res.data :EasyHttp.config.cacheSerializer<T>(res.data) ;
+      try {
+        final res = await _dio.post(url, data: body, options: Options(headers: headers, contentType: contentType), queryParameters: query);
+        return T.toString() == "dynamic" ? res.data : EasyHttp.config.cacheSerializer<T>(res.data);
+      } catch (e) {
+        rethrow;
+      }
     }, showDefaultLoading: showDefaultLoading);
   }
 
@@ -88,13 +90,17 @@ class EasyHttp {
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
     return _onLoading(() async {
-      final res = await _dio.put(
-        url,
-        data: body,
-        options: Options(headers: headers, contentType: contentType),
-        queryParameters: query,
-      );
-      return T.toString() == "dynamic" ? res.data :EasyHttp.config.cacheSerializer<T>(res.data) ;
+      try {
+        final res = await _dio.put(
+          url,
+          data: body,
+          options: Options(headers: headers, contentType: contentType),
+          queryParameters: query,
+        );
+        return T.toString() == "dynamic" ? res.data : EasyHttp.config.cacheSerializer<T>(res.data);
+      } catch(e){
+        rethrow;
+      }
     }, showDefaultLoading: showDefaultLoading);
   }
 
@@ -107,13 +113,40 @@ class EasyHttp {
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
     return _onLoading(() async {
-      final res = await _dio.delete(
-        url,
-        options: Options(headers: headers, contentType: contentType),
-        queryParameters: query,
-      );
-      return T.toString() == "dynamic" ? res.data :EasyHttp.config.cacheSerializer<T>(res.data) ;
+      try {
+        final res = await _dio.delete(
+          url,
+          options: Options(headers: headers, contentType: contentType),
+          queryParameters: query,
+        );
+        return T.toString() == "dynamic" ? res.data : EasyHttp.config.cacheSerializer<T>(res.data);
+      } catch(e){
+        rethrow;
+      }
     }, showDefaultLoading: showDefaultLoading);
+  }
+
+  static Future<Response> download(String url, savePath,
+      {ProgressCallback? onReceiveProgress,
+      Map<String, dynamic>? queryParameters,
+      CancelToken? cancelToken,
+      bool deleteOnError = true,
+      String lengthHeader = Headers.contentLengthHeader,
+      data,
+      Options? options}) async {
+    final downloadDio = Dio();
+    final res = await downloadDio.download(
+      url,
+      savePath,
+      onReceiveProgress: onReceiveProgress,
+      queryParameters: queryParameters,
+      cancelToken: cancelToken,
+      deleteOnError: deleteOnError,
+      lengthHeader: lengthHeader,
+      data: data,
+      options: options,
+    );
+    return res;
   }
 
   static Future<T> _onLoading<T>(Future<T> Function() asyncFunction, {bool showDefaultLoading = true}) async {

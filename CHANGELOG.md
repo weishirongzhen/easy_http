@@ -1,3 +1,11 @@
+## 0.0.21
+
+* add exception rethrow
+
+## 0.0.20
+
+* add download
+
 ## 0.0.19
 
 * bug fixed
