@@ -26,7 +26,6 @@ class ListSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
         onLoading: () {
           controller.loadMore();
         },
-
         footer: CustomFooter(
           builder: (BuildContext context, LoadStatus? mode) {
             Widget body;
@@ -72,6 +71,7 @@ class GridSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final bool initialRefresh;
   final SliverGridDelegate gridDelegate;
+  final Widget? emptyWidget;
 
   const GridSmartRefresher({
     Key? key,
@@ -80,6 +80,7 @@ class GridSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
     this.padding,
     this.initialRefresh = true,
     required this.gridDelegate,
+    this.emptyWidget,
   }) : super(key: key);
 
   @override
@@ -114,12 +115,14 @@ class GridSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
             );
           },
         ),
-        child: GridView.builder(
-          padding: padding,
-          itemBuilder: itemBuilder,
-          itemCount: controller.paginateDataList.length,
-          gridDelegate: gridDelegate,
-        ),
+        child: controller.paginateDataList.isEmpty
+            ? emptyWidget
+            : GridView.builder(
+                padding: padding,
+                itemBuilder: itemBuilder,
+                itemCount: controller.paginateDataList.length,
+                gridDelegate: gridDelegate,
+              ),
       );
     });
   }

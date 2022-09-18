@@ -4,8 +4,8 @@ import 'package:example/controller/task_controller.dart';
 import 'package:example/controller/task_list_controller.dart';
 import 'package:flutter/material.dart';
 
-class PaginationPage extends StatelessWidget {
-  const PaginationPage({Key? key}) : super(key: key);
+class PaginationGridPage extends StatelessWidget {
+  const PaginationGridPage({Key? key}) : super(key: key);
 
   TaskListController get taskListController => Get.find();
 
@@ -15,14 +15,21 @@ class PaginationPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Pagination List"),
+        title: const Text("Pagination Grid"),
       ),
-      body: ListSmartRefresher(
+      body: GridSmartRefresher(
         controller: taskListController,
         itemBuilder: (context, index) => ListTile(
-          title: Text("${taskListController.paginateDataList[index].description } $index"),
+          title: Text("${taskListController.paginateDataList[index].description} $index"),
         ),
-        separatorBuilder: (_, __) => const Divider(),
+        emptyWidget: const Center(
+          child: Text("no data"),
+        ),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+        ),
       ),
     );
   }

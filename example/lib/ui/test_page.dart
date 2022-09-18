@@ -2,8 +2,8 @@ import 'package:easy_http/easy_http.dart';
 import 'package:example/controller/main_controller.dart';
 import 'package:example/controller/register_controller.dart';
 import 'package:example/controller/task_controller.dart';
-import 'package:example/controller/task_list_controller.dart';
-import 'package:example/ui/pagination_page.dart';
+import 'package:example/ui/pagination_grid_page.dart';
+import 'package:example/ui/pagination_list_page.dart';
 import 'package:flutter/material.dart';
 
 class TestPage extends StatelessWidget {
@@ -53,9 +53,15 @@ class TestPage extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Get.to(() => const PaginationPage());
+                  Get.to(() => const PaginationListPage());
                 },
-                child: const Text("Load task with pagination"),
+                child: const Text("Load task with pagination list "),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Get.to(() => const PaginationGridPage());
+                },
+                child: const Text("Load task with pagination grid"),
               ),
               Text(mainController.result),
             ],
