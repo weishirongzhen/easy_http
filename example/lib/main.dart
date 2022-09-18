@@ -1,12 +1,27 @@
 import 'package:easy_http/config/default_easy_http_config.dart';
 import 'package:easy_http/easy_http.dart';
-import 'package:example/controller/todo_controller.dart';
+import 'package:example/controller/main_controller.dart';
 import 'package:example/generated/json/base/json_convert_content.dart';
 import 'package:example/ui/test_page.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
   await EasyHttp.init(config: DefaultEasyHttpConfig(JsonConvert.fromJsonAsT));
+  EasyHttp.addInterceptor(InterceptorsWrapper(onError: (
+    DioError e,
+    ErrorInterceptorHandler handler,
+  ) {
+    MainController.i.result = e.message + (e.response?.data?.toString()??"");
+    handler.next(e);
+  }, onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
+    var headers = {'Content-Type': 'application/json',
+      "Authorization":"Bearer ${MainController.i.token}"
+    };
+    options.headers.addAll(headers);
+    return handler.next(options);
+  }, onResponse: (Response e, ResponseInterceptorHandler handler) {
+    return handler.next(e);
+  }));
   runApp(const MyApp());
 }
 
@@ -16,59 +31,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
+      title: 'EasyHttp',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Get.put(ToDoController());
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Obx(() {
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                'You have pushed the button this many times:',
-              ),
-              Text(
-                Get.find<ToDoController>().httpData.title ?? "",
-                style: Theme.of(context).textTheme.headline4,
-              ),
-            ],
-          ),
-        );
-      }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      home: const TestPage(),
     );
   }
 }

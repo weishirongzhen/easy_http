@@ -1,7 +1,5 @@
 library easy_http;
 
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:easy_http/config/base_easy_http_config.dart';
 import 'package:get/get.dart' hide Response;
@@ -18,6 +16,8 @@ class EasyHttp {
 
   static late BaseEasyHttpConfig _config;
 
+  static Map<String, EasyHttp> instanceNameMap = {};
+
   static final List<Interceptor> _interceptor = [];
 
   static List<Interceptor> get interceptor => _interceptor;
@@ -26,8 +26,11 @@ class EasyHttp {
 
   static BaseEasyHttpConfig get config => _config;
 
-  static init({required BaseEasyHttpConfig config}) async {
+  static init({required BaseEasyHttpConfig config, String? tag}) async {
     await config.init();
+    // if (tag != null && tag.isNotEmpty) {
+    //   instanceNameMap[tag] = EasyHttp._(config);
+    // }
     _instance ??= EasyHttp._(config);
   }
 
@@ -36,8 +39,16 @@ class EasyHttp {
     _dio.interceptors.add(interceptor);
   }
 
-  static Future<T> get<T>(
-    String url, {
+  static EasyHttp? findByTag(String tag) {
+    return instanceNameMap[tag];
+  }
+
+  static EasyHttp? removeByTag(String tag) {
+    return instanceNameMap.remove(tag);
+  }
+
+  static Future<T> get<T>({
+    required String url,
     Map<String, String>? headers,
     String? contentType,
     Map<String, dynamic>? query,
@@ -58,12 +69,12 @@ class EasyHttp {
       } catch (e) {
         rethrow;
       }
-    }, showDefaultLoading: showDefaultLoading);
+    }, showLoading: showDefaultLoading);
   }
 
-  static Future<T> post<T>(
-    String url,
-    dynamic body, {
+  static Future<T> post<T>({
+    required String url,
+    dynamic body,
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -77,12 +88,12 @@ class EasyHttp {
       } catch (e) {
         rethrow;
       }
-    }, showDefaultLoading: showDefaultLoading);
+    }, showLoading: showDefaultLoading);
   }
 
-  static Future<T> put<T>(
-    String url,
-    dynamic body, {
+  static Future<T> put<T>({
+    required String url,
+    dynamic body,
     String? contentType,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
@@ -98,14 +109,14 @@ class EasyHttp {
           queryParameters: query,
         );
         return T.toString() == "dynamic" ? res.data : EasyHttp.config.cacheSerializer<T>(res.data);
-      } catch(e){
+      } catch (e) {
         rethrow;
       }
-    }, showDefaultLoading: showDefaultLoading);
+    }, showLoading: showDefaultLoading);
   }
 
-  static Future<T> delete<T>(
-    String url, {
+  static Future<T> delete<T>({
+    required String url,
     Map<String, String>? headers,
     String? contentType,
     Map<String, dynamic>? query,
@@ -120,14 +131,16 @@ class EasyHttp {
           queryParameters: query,
         );
         return T.toString() == "dynamic" ? res.data : EasyHttp.config.cacheSerializer<T>(res.data);
-      } catch(e){
+      } catch (e) {
         rethrow;
       }
-    }, showDefaultLoading: showDefaultLoading);
+    }, showLoading: showDefaultLoading);
   }
 
-  static Future<Response> download(String url, savePath,
-      {ProgressCallback? onReceiveProgress,
+  static Future<Response> download(
+      {required String url,
+      required String savePath,
+      ProgressCallback? onReceiveProgress,
       Map<String, dynamic>? queryParameters,
       CancelToken? cancelToken,
       bool deleteOnError = true,
@@ -149,8 +162,8 @@ class EasyHttp {
     return res;
   }
 
-  static Future<T> _onLoading<T>(Future<T> Function() asyncFunction, {bool showDefaultLoading = true}) async {
-    if (showDefaultLoading) {
+  static Future<T> _onLoading<T>(Future<T> Function() asyncFunction, {bool showLoading = true}) async {
+    if (showLoading) {
       return Get.showOverlay(
         asyncFunction: asyncFunction,
         opacity: .1,

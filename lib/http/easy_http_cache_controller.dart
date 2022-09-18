@@ -1,8 +1,7 @@
-
 import 'package:easy_http/easy_http.dart';
 import 'package:easy_http/http/easy_http_connect.dart';
 
-abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
+abstract class EasyHttpCacheController<T> extends GetxController with StateMixin<T> {
   T get initHttpResponseData;
 
   late EasyHttpClient<T> _httpClient;
@@ -15,17 +14,16 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
 
   Rx<T> get obsHttpData => _httpData;
 
-  String get localCacheKey => "";
+  /// if want to enable cache, override localCacheKey and give localCacheKey a not-empty value. else leave it empty
+  String get simpleCacheKey => "";
 
-  int get timeout => 100000;
+  int get timeoutInMillSecond => 100000;
 
   String get requestUrl;
 
-  bool get needAuthorized => true;
-
   @override
   void onInit() {
-    _httpClient = EasyHttpClient<T>(initHttpResponseData, localCacheKey: localCacheKey, timeout: timeout);
+    _httpClient = EasyHttpClient<T>(initHttpResponseData, localCacheKey: simpleCacheKey, timeout: timeoutInMillSecond);
 
     super.onInit();
   }
@@ -187,4 +185,8 @@ abstract class EasyHttpController<T> extends GetxController with StateMixin<T> {
   void onSuccess() {}
 
   void onError([String? message]) {}
+
+  void deleteCache() {
+    EasyHttp.config.cacheRunner.deleteCache(simpleCacheKey);
+  }
 }
