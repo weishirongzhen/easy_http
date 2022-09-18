@@ -32,31 +32,39 @@ mixin PaginationMixin<R> {
   }
 
   void refreshList() async {
-    currentPageNumber = defaultStartPage;
-    _readCache();
-    paginateDataList.value = await requestPaginateData(currentPageNumber, defaultPageSize, (t) {
-      total = t;
-    });
-    _writeCache();
+    try {
+      currentPageNumber = defaultStartPage;
+      _readCache();
+      paginateDataList.value = await requestPaginateData(currentPageNumber, defaultPageSize, (t) {
+        total = t;
+      });
+      _writeCache();
 
-    _refreshController!.refreshCompleted(resetFooterState: true);
-    if (paginateDataList.length == total) {
-      _refreshController!.loadNoData();
+      _refreshController!.refreshCompleted(resetFooterState: true);
+      if (paginateDataList.length == total) {
+        _refreshController!.loadNoData();
+      }
+    } catch (e, s) {
+      _refreshController!.refreshFailed();
     }
   }
 
   void loadMore() async {
-    currentPageNumber++;
-    final list = await requestPaginateData(currentPageNumber, defaultPageSize, (t) {
-      total = t;
-    });
+    try {
+      currentPageNumber++;
+      final list = await requestPaginateData(currentPageNumber, defaultPageSize, (t) {
+        total = t;
+      });
+      paginateDataList.addAll(list);
 
-    paginateDataList.addAll(list);
-    _writeCache();
-    if (paginateDataList.length == total) {
-      _refreshController!.loadNoData();
-    } else {
-      _refreshController!.loadComplete();
+      _writeCache();
+      if (paginateDataList.length == total) {
+        _refreshController!.loadNoData();
+      } else {
+        _refreshController!.loadComplete();
+      }
+    } catch (e, s) {
+      _refreshController!.refreshFailed();
     }
   }
 
@@ -87,7 +95,7 @@ mixin PaginationMixin<R> {
 
   Future<List<R>> requestPaginateData(int currentPageNumber, int pageSize, Function(int total) setTotal);
 
-  void deleteListCache(){
+  void deleteListCache() {
     EasyHttp.config.cacheRunner.deleteCache(paginationCacheKey);
   }
 }

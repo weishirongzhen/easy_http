@@ -116,7 +116,7 @@ class GridSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
           },
         ),
         child: controller.paginateDataList.isEmpty
-            ? emptyWidget
+            ? emptyWidget ?? const SizedBox()
             : GridView.builder(
                 padding: padding,
                 itemBuilder: itemBuilder,
@@ -176,7 +176,7 @@ class CustomSmartRefresh<T extends PaginationMixin> extends StatelessWidget {
             );
           },
         ),
-        child: controller.paginateDataList.isEmpty ? emptyWidget : child,
+        child: controller.paginateDataList.isEmpty ? emptyWidget ?? const SizedBox() : child,
       );
     });
   }

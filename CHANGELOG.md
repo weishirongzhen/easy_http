@@ -1,3 +1,7 @@
+## 1.0.0
+
+* add pagination support
+
 ## 0.0.21
 
 * add exception rethrow
