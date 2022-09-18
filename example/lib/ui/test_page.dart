@@ -2,6 +2,7 @@ import 'package:easy_http/easy_http.dart';
 import 'package:example/controller/main_controller.dart';
 import 'package:example/controller/register_controller.dart';
 import 'package:example/controller/task_controller.dart';
+import 'package:example/ui/pagination_custom_view_page.dart';
 import 'package:example/ui/pagination_grid_page.dart';
 import 'package:example/ui/pagination_list_page.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +63,12 @@ class TestPage extends StatelessWidget {
                   Get.to(() => const PaginationGridPage());
                 },
                 child: const Text("Load task with pagination grid"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Get.to(() => const PaginationCustomViewPage());
+                },
+                child: const Text("Load task with custom pagination view"),
               ),
               Text(mainController.result),
             ],

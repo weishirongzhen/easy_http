@@ -127,3 +127,57 @@ class GridSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
     });
   }
 }
+
+class CustomSmartRefresh<T extends PaginationMixin> extends StatelessWidget {
+  final T controller;
+  final EdgeInsetsGeometry? padding;
+  final bool initialRefresh;
+  final Widget? emptyWidget;
+  final Widget child;
+
+  const CustomSmartRefresh({
+    Key? key,
+    required this.controller,
+    this.padding,
+    this.initialRefresh = true,
+    this.emptyWidget,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      return SmartRefresher(
+        controller: controller.getRefreshController(initialRefresh: initialRefresh),
+        enablePullDown: true,
+        physics: const ClampingScrollPhysics(),
+        enablePullUp: true,
+        onRefresh: controller.refreshList,
+        onLoading: () {
+          controller.loadMore();
+        },
+        footer: CustomFooter(
+          builder: (BuildContext context, LoadStatus? mode) {
+            Widget body;
+            if (mode == LoadStatus.idle) {
+              body = const Text("上拉加载");
+            } else if (mode == LoadStatus.loading) {
+              body = const CupertinoActivityIndicator();
+            } else if (mode == LoadStatus.failed) {
+              body = const Text("加载失败！点击重试！");
+            } else if (mode == LoadStatus.canLoading) {
+              body = const Text("松手，加载更多!");
+            } else {
+              body = const Text("没有更多数据了!");
+            }
+            return SizedBox(
+              height: 55.0,
+              child: Center(child: body),
+            );
+          },
+        ),
+        child: controller.paginateDataList.isEmpty ? emptyWidget : child,
+      );
+    });
+  }
+}
