@@ -1,4 +1,8 @@
-## 1.0.0
+## 1.0.1
+
+* ui improvement
+
+* ## 1.0.0
 
 * add pagination support
 
@@ -42,11 +46,9 @@
 
 * replace http client to dio
 
-
 ## 0.0.11
 
 * update
-
 
 ## 0.0.10
 
@@ -79,7 +81,6 @@
 ## 0.0.2
 
 * update
-
 
 ## 0.0.1
 
