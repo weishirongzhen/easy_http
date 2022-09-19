@@ -10,9 +10,20 @@ class ListSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final bool initialRefresh;
   final Widget? emptyWidget;
+  final Widget? header;
+  final Widget? footer;
 
-  const ListSmartRefresher({Key? key, required this.controller, required this.itemBuilder, this.separatorBuilder, this.padding, this.initialRefresh = true, this.emptyWidget})
-      : super(key: key);
+  const ListSmartRefresher({
+    Key? key,
+    required this.controller,
+    required this.itemBuilder,
+    this.separatorBuilder,
+    this.padding,
+    this.initialRefresh = true,
+    this.emptyWidget,
+    this.header,
+    this.footer,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,26 +37,8 @@ class ListSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
         onLoading: () {
           controller.loadMore();
         },
-        footer: CustomFooter(
-          builder: (BuildContext context, LoadStatus? mode) {
-            Widget body;
-            if (mode == LoadStatus.idle) {
-              body = const Text("上拉加载");
-            } else if (mode == LoadStatus.loading) {
-              body = const CupertinoActivityIndicator();
-            } else if (mode == LoadStatus.failed) {
-              body = const Text("加载失败！点击重试！");
-            } else if (mode == LoadStatus.canLoading) {
-              body = const Text("松手，加载更多!");
-            } else {
-              body = const Text("没有更多数据了!");
-            }
-            return SizedBox(
-              height: 55.0,
-              child: Center(child: body),
-            );
-          },
-        ),
+        header: header ?? const ClassicHeader(),
+        footer: footer ?? getCustomFooter(),
         child: controller.paginateDataList.isEmpty
             ? emptyWidget ?? const SizedBox()
             : (separatorBuilder == null
@@ -72,6 +65,8 @@ class GridSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
   final bool initialRefresh;
   final SliverGridDelegate gridDelegate;
   final Widget? emptyWidget;
+  final Widget? header;
+  final Widget? footer;
 
   const GridSmartRefresher({
     Key? key,
@@ -81,6 +76,8 @@ class GridSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
     this.initialRefresh = true,
     required this.gridDelegate,
     this.emptyWidget,
+    this.header,
+    this.footer,
   }) : super(key: key);
 
   @override
@@ -95,26 +92,8 @@ class GridSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
         onLoading: () {
           controller.loadMore();
         },
-        footer: CustomFooter(
-          builder: (BuildContext context, LoadStatus? mode) {
-            Widget body;
-            if (mode == LoadStatus.idle) {
-              body = const Text("上拉加载");
-            } else if (mode == LoadStatus.loading) {
-              body = const CupertinoActivityIndicator();
-            } else if (mode == LoadStatus.failed) {
-              body = const Text("加载失败！点击重试！");
-            } else if (mode == LoadStatus.canLoading) {
-              body = const Text("松手，加载更多!");
-            } else {
-              body = const Text("没有更多数据了!");
-            }
-            return SizedBox(
-              height: 55.0,
-              child: Center(child: body),
-            );
-          },
-        ),
+        header: header ?? const ClassicHeader(),
+        footer: footer ?? getCustomFooter(),
         child: controller.paginateDataList.isEmpty
             ? emptyWidget ?? const SizedBox()
             : GridView.builder(
@@ -134,6 +113,8 @@ class CustomSmartRefresh<T extends PaginationMixin> extends StatelessWidget {
   final bool initialRefresh;
   final Widget? emptyWidget;
   final Widget child;
+  final Widget? header;
+  final Widget? footer;
 
   const CustomSmartRefresh({
     Key? key,
@@ -142,6 +123,8 @@ class CustomSmartRefresh<T extends PaginationMixin> extends StatelessWidget {
     this.initialRefresh = true,
     this.emptyWidget,
     required this.child,
+    this.header,
+    this.footer,
   }) : super(key: key);
 
   @override
@@ -156,28 +139,33 @@ class CustomSmartRefresh<T extends PaginationMixin> extends StatelessWidget {
         onLoading: () {
           controller.loadMore();
         },
-        footer: CustomFooter(
-          builder: (BuildContext context, LoadStatus? mode) {
-            Widget body;
-            if (mode == LoadStatus.idle) {
-              body = const Text("上拉加载");
-            } else if (mode == LoadStatus.loading) {
-              body = const CupertinoActivityIndicator();
-            } else if (mode == LoadStatus.failed) {
-              body = const Text("加载失败！点击重试！");
-            } else if (mode == LoadStatus.canLoading) {
-              body = const Text("松手，加载更多!");
-            } else {
-              body = const Text("没有更多数据了!");
-            }
-            return SizedBox(
-              height: 55.0,
-              child: Center(child: body),
-            );
-          },
-        ),
+        header: header ?? const ClassicHeader(),
+        footer: footer ?? getCustomFooter(),
         child: controller.paginateDataList.isEmpty ? emptyWidget ?? const SizedBox() : child,
       );
     });
   }
+}
+
+CustomFooter getCustomFooter() {
+  return CustomFooter(
+    builder: (BuildContext context, LoadStatus? mode) {
+      Widget body;
+      if (mode == LoadStatus.idle) {
+        body = const Text("Pull up to load more");
+      } else if (mode == LoadStatus.loading) {
+        body = const CupertinoActivityIndicator();
+      } else if (mode == LoadStatus.failed) {
+        body = const Text("load failed");
+      } else if (mode == LoadStatus.canLoading) {
+        body = const Text("Release and load more");
+      } else {
+        body = const Text("no more data");
+      }
+      return SizedBox(
+        height: 55.0,
+        child: Center(child: body),
+      );
+    },
+  );
 }
