@@ -1,6 +1,6 @@
-import 'package:easy_http/easy_http.dart';
-import 'package:easy_http/http/easy_http_connect.dart';
+import '../easy_http.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'easy_http_connect.dart';
 
 abstract class EasyHttpCacheController<T> extends GetxController with StateMixin<T> {
   RefreshController? _refreshController;
@@ -43,7 +43,7 @@ abstract class EasyHttpCacheController<T> extends GetxController with StateMixin
     Map<String, dynamic>? query,
     bool showDefaultLoading = true,
   }) async {
-    return onLoading(() async {
+    return EasyHttp.onLoading(() async {
       try {
         final response = await _httpClient.dio.get(
           requestUrl,
@@ -70,7 +70,7 @@ abstract class EasyHttpCacheController<T> extends GetxController with StateMixin
     Map<String, dynamic>? query,
     bool showDefaultLoading = true,
   }) async {
-    return onLoading(() async {
+    return EasyHttp.onLoading(() async {
       try {
         final response = await _httpClient.dio.post(
           requestUrl,
@@ -99,7 +99,7 @@ abstract class EasyHttpCacheController<T> extends GetxController with StateMixin
     Map<String, dynamic>? query,
     bool showDefaultLoading = true,
   }) async {
-    return onLoading(() async {
+    return EasyHttp.onLoading(() async {
       try {
         final response = await _httpClient.dio.put(
           requestUrl,
@@ -128,7 +128,7 @@ abstract class EasyHttpCacheController<T> extends GetxController with StateMixin
     Map<String, dynamic>? query,
     bool showDefaultLoading = true,
   }) async {
-    return onLoading(() async {
+    return EasyHttp.onLoading(() async {
       try {
         final response = await _httpClient.dio.patch(
           requestUrl,
@@ -156,7 +156,7 @@ abstract class EasyHttpCacheController<T> extends GetxController with StateMixin
     Map<String, dynamic>? query,
     bool showDefaultLoading = true,
   }) async {
-    return onLoading(() async {
+    return EasyHttp.onLoading(() async {
       try {
         final response = await _httpClient.dio.delete(
           requestUrl,
@@ -177,17 +177,6 @@ abstract class EasyHttpCacheController<T> extends GetxController with StateMixin
     }, showDefaultLoading: showDefaultLoading);
   }
 
-  Future<T> onLoading(Future<T> Function() asyncFunction, {bool showDefaultLoading = true}) async {
-    if (showDefaultLoading) {
-      return Get.showOverlay(
-        asyncFunction: asyncFunction,
-        opacity: .1,
-        loadingWidget: EasyHttp.config.loadingWidget,
-      );
-    } else {
-      return asyncFunction();
-    }
-  }
 
   void onEmpty() {}
 

@@ -2,6 +2,7 @@ library easy_http;
 
 import 'package:dio/dio.dart';
 import 'package:easy_http/config/base_easy_http_config.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 
 export 'package:get/get.dart' hide FormData, MultipartFile, Response;
@@ -56,7 +57,7 @@ class EasyHttp {
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
 
-    return _onLoading(() async {
+    return onLoading(() async {
       try {
         final res = await _dio.get(url,
             options: Options(
@@ -69,7 +70,7 @@ class EasyHttp {
       } catch (e) {
         rethrow;
       }
-    }, showLoading: showDefaultLoading);
+    }, showDefaultLoading: showDefaultLoading);
   }
 
   static Future<T> post<T>({
@@ -81,14 +82,14 @@ class EasyHttp {
     bool showDefaultLoading = true,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
-    return _onLoading(() async {
+    return onLoading(() async {
       try {
         final res = await _dio.post(url, data: body, options: Options(headers: headers, contentType: contentType), queryParameters: query);
         return T.toString() == "dynamic" ? res.data : EasyHttp.config.cacheSerializer<T>(res.data);
       } catch (e) {
         rethrow;
       }
-    }, showLoading: showDefaultLoading);
+    }, showDefaultLoading: showDefaultLoading);
   }
 
   static Future<T> put<T>({
@@ -100,7 +101,7 @@ class EasyHttp {
     bool showDefaultLoading = true,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
-    return _onLoading(() async {
+    return onLoading(() async {
       try {
         final res = await _dio.put(
           url,
@@ -112,7 +113,7 @@ class EasyHttp {
       } catch (e) {
         rethrow;
       }
-    }, showLoading: showDefaultLoading);
+    }, showDefaultLoading: showDefaultLoading);
   }
 
   static Future<T> delete<T>({
@@ -123,7 +124,7 @@ class EasyHttp {
     bool showDefaultLoading = true,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
-    return _onLoading(() async {
+    return onLoading(() async {
       try {
         final res = await _dio.delete(
           url,
@@ -134,7 +135,7 @@ class EasyHttp {
       } catch (e) {
         rethrow;
       }
-    }, showLoading: showDefaultLoading);
+    }, showDefaultLoading: showDefaultLoading);
   }
 
   static Future<Response> download(
@@ -162,13 +163,23 @@ class EasyHttp {
     return res;
   }
 
-  static Future<T> _onLoading<T>(Future<T> Function() asyncFunction, {bool showLoading = true}) async {
-    if (showLoading) {
-      return Get.showOverlay(
-        asyncFunction: asyncFunction,
-        opacity: .1,
-        loadingWidget: EasyHttp.config.loadingWidget,
+  static Future<T> onLoading<T>(Future<T> Function() asyncFunction, {bool showDefaultLoading = true}) async {
+    if (showDefaultLoading) {
+      T data;
+      Get.dialog(
+        EasyHttp.config.loadingWidget,
+        barrierDismissible: true,
+        barrierColor: Colors.black12,
       );
+      try {
+        data = await asyncFunction();
+        Get.back();
+      } on Exception catch (_) {
+        Get.back();
+        rethrow;
+      }
+
+      return data;
     } else {
       return asyncFunction();
     }

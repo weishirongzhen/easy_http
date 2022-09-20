@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:easy_http/easy_http.dart';
+import '../easy_http.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 mixin PaginationMixin<R> {

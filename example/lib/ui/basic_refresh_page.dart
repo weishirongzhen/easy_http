@@ -1,7 +1,6 @@
 import 'package:easy_http/easy_http.dart';
 import 'package:easy_http/pagination/easyhttp_smart_refresher.dart';
 import 'package:example/controller/basic_controller.dart';
-import 'package:example/controller/task_list_controller.dart';
 import 'package:flutter/material.dart';
 
 class BasicRefreshPage extends StatelessWidget {

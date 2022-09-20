@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-
-import 'package:dio/dio.dart';
-import 'package:easy_http/easy_http.dart' hide Response;
+import '../easy_http.dart' hide Response;
 
 class EasyHttpClient<T> {
   /// http response init data, use for initial _httpData obs value

@@ -1,4 +1,4 @@
-import 'package:easy_http/cache/base_cache_runner.dart';
+import '../cache/base_cache_runner.dart';
 import 'package:flutter/material.dart';
 
 abstract class BaseEasyHttpConfig {

@@ -72,7 +72,6 @@ class RegisterController extends GetxController {
 
       MainController.i.token = res.token ?? "";
 
-      print(res.toString());
       return res;
     } catch (e) {
       return null;

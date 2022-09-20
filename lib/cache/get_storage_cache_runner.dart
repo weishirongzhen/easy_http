@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:easy_http/cache/base_cache_runner.dart';
-import 'package:easy_http/easy_http.dart';
+import '../cache/base_cache_runner.dart';
+import '../easy_http.dart';
 import 'package:get_storage/get_storage.dart';
 
 class GetStorageCacheRunner implements BaseCacheRunner {
