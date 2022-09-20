@@ -1,3 +1,7 @@
+## 1.0.3
+
+* bug fixed
+
 ## 1.0.2
 
 * add basic refresh without pagination
