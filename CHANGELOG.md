@@ -1,3 +1,7 @@
+## 1.0.2
+
+* add basic refresh without pagination
+
 ## 1.0.1
 
 * ui improvement
