@@ -168,7 +168,7 @@ class EasyHttp {
       T data;
       Get.dialog(
         EasyHttp.config.loadingWidget,
-        barrierDismissible: true,
+        barrierDismissible: false,
         barrierColor: Colors.black12,
       );
       try {
