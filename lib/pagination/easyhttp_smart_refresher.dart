@@ -1,4 +1,5 @@
 import 'package:easy_http/easy_http.dart';
+import 'package:easy_http/http/easy_http_cache_controller.dart';
 import 'package:easy_http/pagination/pagination_mixin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -129,21 +130,54 @@ class CustomSmartRefresh<T extends PaginationMixin> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return SmartRefresher(
-        controller: controller.getRefreshController(initialRefresh: initialRefresh),
-        enablePullDown: true,
-        physics: const ClampingScrollPhysics(),
-        enablePullUp: true,
-        onRefresh: controller.refreshList,
-        onLoading: () {
-          controller.loadMore();
-        },
-        header: header ?? const ClassicHeader(),
-        footer: footer ?? getCustomFooter(),
-        child: controller.paginateDataList.isEmpty ? emptyWidget ?? const SizedBox() : child,
-      );
-    });
+    return SmartRefresher(
+      controller: controller.getRefreshController(initialRefresh: initialRefresh),
+      enablePullDown: true,
+      physics: const ClampingScrollPhysics(),
+      enablePullUp: true,
+      onRefresh: controller.refreshList,
+      onLoading: () {
+        controller.loadMore();
+      },
+      header: header ?? const ClassicHeader(),
+      footer: footer ?? getCustomFooter(),
+      child: controller.paginateDataList.isEmpty ? emptyWidget ?? const SizedBox() : child,
+    );
+  }
+}
+
+class BasicSmartRefresh<T extends EasyHttpCacheController> extends StatelessWidget {
+  final T controller;
+  final EdgeInsetsGeometry? padding;
+  final bool initialRefresh;
+  final Widget? emptyWidget;
+  final Widget child;
+  final Widget? header;
+  final Widget? footer;
+
+  const BasicSmartRefresh({
+    Key? key,
+    required this.controller,
+    this.padding,
+    this.initialRefresh = true,
+    this.emptyWidget,
+    required this.child,
+    this.header,
+    this.footer,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SmartRefresher(
+      controller: controller.getRefreshController(initialRefresh: initialRefresh),
+      enablePullDown: true,
+      physics: const ClampingScrollPhysics(),
+      enablePullUp: false,
+      onRefresh: controller.refreshData,
+      header: header ?? const ClassicHeader(),
+      footer: footer ?? getCustomFooter(),
+      child: child,
+    );
   }
 }
 

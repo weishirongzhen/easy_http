@@ -1,0 +1,23 @@
+import 'package:easy_http/http/easy_http_cache_controller.dart';
+import 'package:easy_http/pagination/pagination_mixin.dart';
+import 'package:example/api/api.dart';
+import 'package:example/model/task_list_entity.dart';
+
+class BasicController extends EasyHttpCacheController<TaskListEntity> {
+  @override
+  TaskListEntity get initHttpResponseData => TaskListEntity();
+
+  @override
+  String get requestUrl => API.task;
+
+  @override
+  String get simpleCacheKey => "$requestUrl@basic";
+
+  @override
+  Future<TaskListEntity?> refreshData() async {
+    await get(query: {"skip": 2}, showDefaultLoading: false);
+
+    refreshController?.refreshCompleted();
+    return super.refreshData();
+  }
+}

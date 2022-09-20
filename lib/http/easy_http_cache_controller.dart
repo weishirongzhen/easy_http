@@ -1,7 +1,12 @@
 import 'package:easy_http/easy_http.dart';
 import 'package:easy_http/http/easy_http_connect.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 abstract class EasyHttpCacheController<T> extends GetxController with StateMixin<T> {
+  RefreshController? _refreshController;
+
+  RefreshController? get refreshController => _refreshController;
+
   T get initHttpResponseData;
 
   late EasyHttpClient<T> _httpClient;
@@ -24,8 +29,12 @@ abstract class EasyHttpCacheController<T> extends GetxController with StateMixin
   @override
   void onInit() {
     _httpClient = EasyHttpClient<T>(initHttpResponseData, localCacheKey: simpleCacheKey, timeout: timeoutInMillSecond);
-
     super.onInit();
+  }
+
+  RefreshController getRefreshController({bool initialRefresh = true}) {
+    _refreshController ??= RefreshController(initialRefresh: initialRefresh);
+    return _refreshController!;
   }
 
   Future<T> get({
@@ -188,5 +197,9 @@ abstract class EasyHttpCacheController<T> extends GetxController with StateMixin
 
   void deleteCache() {
     EasyHttp.config.cacheRunner.deleteCache(simpleCacheKey);
+  }
+
+  Future<T?> refreshData() async {
+    return null;
   }
 }

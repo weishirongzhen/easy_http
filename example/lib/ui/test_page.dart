@@ -2,6 +2,7 @@ import 'package:easy_http/easy_http.dart';
 import 'package:example/controller/main_controller.dart';
 import 'package:example/controller/register_controller.dart';
 import 'package:example/controller/task_controller.dart';
+import 'package:example/ui/basic_refresh_page.dart';
 import 'package:example/ui/pagination_custom_view_page.dart';
 import 'package:example/ui/pagination_grid_page.dart';
 import 'package:example/ui/pagination_list_page.dart';
@@ -51,6 +52,12 @@ class TestPage extends StatelessWidget {
                   taskController.addTask();
                 },
                 child: const Text("Add Task"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Get.to(() => const BasicRefreshPage());
+                },
+                child: const Text("basic refresh data"),
               ),
               ElevatedButton(
                 onPressed: () {
