@@ -15,9 +15,8 @@ class BasicController extends EasyHttpCacheController<TaskListEntity> {
 
   @override
   Future<TaskListEntity?> refreshData() async {
-    await get(query: {"skip": 2}, showDefaultLoading: false);
-
+    final data = await get(query: {"skip": 2}, showDefaultLoading: false);
     refreshController?.refreshCompleted();
-    return super.refreshData();
+    return data;
   }
 }
