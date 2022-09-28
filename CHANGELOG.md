@@ -1,3 +1,7 @@
+## 1.0.4
+
+* import fix
+
 ## 1.0.3
 
 * bug fixed

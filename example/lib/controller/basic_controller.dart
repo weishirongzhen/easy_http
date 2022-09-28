@@ -1,4 +1,4 @@
-import 'package:easy_http/http/easy_http_cache_controller.dart';
+import 'package:easy_http/easy_http.dart';
 import 'package:example/api/api.dart';
 import 'package:example/model/task_list_entity.dart';
 

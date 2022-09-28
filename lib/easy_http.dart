@@ -1,12 +1,15 @@
 library easy_http;
 
+import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_http/config/base_easy_http_config.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 
 export 'package:get/get.dart' hide FormData, MultipartFile, Response;
 export 'package:dio/dio.dart';
+export './http/easy_http_cache_controller.dart';
+export './pagination/easyhttp_smart_refresher.dart';
+export './pagination/pagination_mixin.dart';
 
 class EasyHttp {
   EasyHttp._(BaseEasyHttpConfig config) {

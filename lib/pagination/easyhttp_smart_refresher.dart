@@ -1,5 +1,4 @@
 import '../easy_http.dart';
-import '../http/easy_http_cache_controller.dart';
 import '../pagination/pagination_mixin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
