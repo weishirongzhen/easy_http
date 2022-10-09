@@ -1,10 +1,13 @@
 EasyHttp
 
 ## Features
-
+Request data return from cache first and update cache 
 
 
 ## Getting started
+```
+flutter pub add easy_http
+```
 
 
 
@@ -13,8 +16,6 @@ EasyHttp
 
 
 ```dart
-const like = 'sample';
+const response = await EasyHttp.get(url);
 ```
-
-## Additional information
 
