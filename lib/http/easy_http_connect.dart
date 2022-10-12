@@ -18,7 +18,6 @@ class EasyHttpClient<T> {
 
   late Dio dio;
 
-
   EasyHttpClient(this.initData, {this.localCacheKey = "", this.timeout = 100000}) {
     dio = Dio();
     dio.options.connectTimeout = timeout;
@@ -38,8 +37,6 @@ class EasyHttpClient<T> {
       }
       return handler.next(options);
     }, onResponse: (response, handler) {
-      log("request = ${response.realUri} response = ${jsonEncode(response.data)}");
-
       if (response.data != null) {
         try {
           _httpData.value = EasyHttp.config.cacheSerializer<T>(response.data) ?? initData;
@@ -55,8 +52,5 @@ class EasyHttpClient<T> {
     }, onError: (DioError e, handler) {
       return handler.next(e); //continue
     }));
-
   }
-
-
 }
