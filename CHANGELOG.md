@@ -1,3 +1,7 @@
+## 1.0.6
+
+* add intl
+
 ## 1.0.5
 
 * delete some log
