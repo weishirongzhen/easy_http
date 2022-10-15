@@ -4,6 +4,7 @@ import 'package:example/controller/main_controller.dart';
 import 'package:example/generated/json/base/json_convert_content.dart';
 import 'package:example/ui/test_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   await EasyHttp.init(config: DefaultEasyHttpConfig(JsonConvert.fromJsonAsT));
@@ -11,12 +12,10 @@ void main() async {
     DioError e,
     ErrorInterceptorHandler handler,
   ) {
-    MainController.i.result = e.message + (e.response?.data?.toString()??"");
+    MainController.i.result = e.message + (e.response?.data?.toString() ?? "");
     handler.next(e);
   }, onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
-    var headers = {'Content-Type': 'application/json',
-      "Authorization":"Bearer ${MainController.i.token}"
-    };
+    var headers = {'Content-Type': 'application/json', "Authorization": "Bearer ${MainController.i.token}"};
     options.headers.addAll(headers);
     return handler.next(options);
   }, onResponse: (Response e, ResponseInterceptorHandler handler) {
@@ -31,6 +30,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      localizationsDelegates: const [
+        RefreshLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'), // American English
+        Locale('zh'), // Israeli Hebrew
+        // ...
+      ],
       title: 'EasyHttp',
       theme: ThemeData(
         primarySwatch: Colors.blue,

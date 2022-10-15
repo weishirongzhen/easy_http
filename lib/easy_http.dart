@@ -7,9 +7,11 @@ import 'package:get/get.dart' hide Response;
 
 export 'package:get/get.dart' hide FormData, MultipartFile, Response;
 export 'package:dio/dio.dart';
+export 'package:pull_to_refresh/pull_to_refresh.dart';
 export './http/easy_http_cache_controller.dart';
 export './pagination/easyhttp_smart_refresher.dart';
 export './pagination/pagination_mixin.dart';
+
 
 class EasyHttp {
   EasyHttp._(BaseEasyHttpConfig config) {
@@ -83,11 +85,20 @@ class EasyHttp {
     Map<String, String>? headers,
     Map<String, dynamic>? query,
     bool showDefaultLoading = true,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
     return onLoading(() async {
       try {
-        final res = await _dio.post(url, data: body, options: Options(headers: headers, contentType: contentType), queryParameters: query);
+        final res = await _dio.post(
+          url,
+          data: body,
+          options: Options(headers: headers, contentType: contentType),
+          queryParameters: query,
+          onSendProgress: onSendProgress,
+          onReceiveProgress: onReceiveProgress,
+        );
         return T.toString() == "dynamic" ? res.data : EasyHttp.config.cacheSerializer<T>(res.data);
       } catch (e) {
         rethrow;

@@ -69,6 +69,8 @@ abstract class EasyHttpCacheController<T> extends GetxController with StateMixin
     Map<String, String>? headers,
     Map<String, dynamic>? query,
     bool showDefaultLoading = true,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) async {
     return EasyHttp.onLoading(() async {
       try {
@@ -77,6 +79,8 @@ abstract class EasyHttpCacheController<T> extends GetxController with StateMixin
           data: body,
           queryParameters: query,
           options: Options(headers: headers, contentType: contentType),
+          onSendProgress: onSendProgress,
+          onReceiveProgress: onReceiveProgress,
         );
 
         if (response.data == null) {
@@ -176,7 +180,6 @@ abstract class EasyHttpCacheController<T> extends GetxController with StateMixin
       return httpData;
     }, showDefaultLoading: showDefaultLoading);
   }
-
 
   void onEmpty() {}
 

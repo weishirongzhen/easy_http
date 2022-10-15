@@ -1,5 +1,4 @@
 import '../easy_http.dart';
-import '../pagination/pagination_mixin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -38,7 +37,7 @@ class ListSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
           controller.loadMore();
         },
         header: header ?? const ClassicHeader(),
-        footer: footer ?? getCustomFooter(),
+        footer: footer,
         child: controller.paginateDataList.isEmpty
             ? emptyWidget ?? const SizedBox()
             : (separatorBuilder == null
@@ -93,7 +92,7 @@ class GridSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
           controller.loadMore();
         },
         header: header ?? const ClassicHeader(),
-        footer: footer ?? getCustomFooter(),
+        footer: footer,
         child: controller.paginateDataList.isEmpty
             ? emptyWidget ?? const SizedBox()
             : GridView.builder(
@@ -139,7 +138,7 @@ class CustomSmartRefresh<T extends PaginationMixin> extends StatelessWidget {
         controller.loadMore();
       },
       header: header ?? const ClassicHeader(),
-      footer: footer ?? getCustomFooter(),
+      footer: footer,
       child: controller.paginateDataList.isEmpty ? emptyWidget ?? const SizedBox() : child,
     );
   }
@@ -174,26 +173,33 @@ class BasicSmartRefresh<T extends EasyHttpCacheController> extends StatelessWidg
       enablePullUp: false,
       onRefresh: controller.refreshData,
       header: header ?? const ClassicHeader(),
-      footer: footer ?? getCustomFooter(),
+      footer: footer,
       child: child,
     );
   }
 }
 
-CustomFooter getCustomFooter() {
+/// no use
+CustomFooter getDefaultFooter({
+  String? idle,
+  String? loading,
+  String? failed,
+  String? canLoading,
+  String? noMore,
+}) {
   return CustomFooter(
     builder: (BuildContext context, LoadStatus? mode) {
       Widget body;
       if (mode == LoadStatus.idle) {
-        body = const Text("Pull up to load more");
+        body = Text(idle ?? "Pull up to load more");
       } else if (mode == LoadStatus.loading) {
-        body = const CupertinoActivityIndicator();
+        body = Text(loading ?? "Loading");
       } else if (mode == LoadStatus.failed) {
-        body = const Text("load failed");
+        body = Text(failed ?? "load failed");
       } else if (mode == LoadStatus.canLoading) {
-        body = const Text("Release and load more");
+        body = Text(canLoading ?? "Release and load more");
       } else {
-        body = const Text("no more data");
+        body = Text(noMore ?? "No more");
       }
       return SizedBox(
         height: 55.0,
