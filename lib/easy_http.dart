@@ -12,7 +12,6 @@ export './http/easy_http_cache_controller.dart';
 export './pagination/easyhttp_smart_refresher.dart';
 export './pagination/pagination_mixin.dart';
 
-
 class EasyHttp {
   EasyHttp._(BaseEasyHttpConfig config) {
     _config = config;
@@ -61,7 +60,6 @@ class EasyHttp {
     bool showDefaultLoading = true,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
-
     return onLoading(() async {
       try {
         final res = await _dio.get(url,
@@ -72,6 +70,30 @@ class EasyHttp {
             queryParameters: query);
 
         return T.toString() == "dynamic" ? res.data : EasyHttp.config.cacheSerializer<T>(res.data);
+      } catch (e) {
+        rethrow;
+      }
+    }, showDefaultLoading: showDefaultLoading);
+  }
+
+  static Future<Response> rawGet({
+    required String url,
+    Map<String, String>? headers,
+    String? contentType,
+    Map<String, dynamic>? query,
+    bool showDefaultLoading = true,
+  }) {
+    if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
+    return onLoading(() async {
+      try {
+        final res = await _dio.get(url,
+            options: Options(
+              headers: headers,
+              contentType: contentType,
+            ),
+            queryParameters: query);
+
+        return res;
       } catch (e) {
         rethrow;
       }
@@ -106,6 +128,34 @@ class EasyHttp {
     }, showDefaultLoading: showDefaultLoading);
   }
 
+  static Future<Response> rawPost({
+    required String url,
+    dynamic body,
+    String? contentType,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+    bool showDefaultLoading = true,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) {
+    if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
+    return onLoading(() async {
+      try {
+        final res = await _dio.post(
+          url,
+          data: body,
+          options: Options(headers: headers, contentType: contentType),
+          queryParameters: query,
+          onSendProgress: onSendProgress,
+          onReceiveProgress: onReceiveProgress,
+        );
+        return res.data;
+      } catch (e) {
+        rethrow;
+      }
+    }, showDefaultLoading: showDefaultLoading);
+  }
+
   static Future<T> put<T>({
     required String url,
     dynamic body,
@@ -130,6 +180,30 @@ class EasyHttp {
     }, showDefaultLoading: showDefaultLoading);
   }
 
+  static Future<Response> rawPut({
+    required String url,
+    dynamic body,
+    String? contentType,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+    bool showDefaultLoading = true,
+  }) {
+    if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
+    return onLoading(() async {
+      try {
+        final res = await _dio.put(
+          url,
+          data: body,
+          options: Options(headers: headers, contentType: contentType),
+          queryParameters: query,
+        );
+        return res;
+      } catch (e) {
+        rethrow;
+      }
+    }, showDefaultLoading: showDefaultLoading);
+  }
+
   static Future<T> delete<T>({
     required String url,
     Map<String, String>? headers,
@@ -146,6 +220,28 @@ class EasyHttp {
           queryParameters: query,
         );
         return T.toString() == "dynamic" ? res.data : EasyHttp.config.cacheSerializer<T>(res.data);
+      } catch (e) {
+        rethrow;
+      }
+    }, showDefaultLoading: showDefaultLoading);
+  }
+
+  static Future<Response> rawDelete({
+    required String url,
+    Map<String, String>? headers,
+    String? contentType,
+    Map<String, dynamic>? query,
+    bool showDefaultLoading = true,
+  }) {
+    if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
+    return onLoading(() async {
+      try {
+        final res = await _dio.delete(
+          url,
+          options: Options(headers: headers, contentType: contentType),
+          queryParameters: query,
+        );
+        return res.data;
       } catch (e) {
         rethrow;
       }
