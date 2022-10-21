@@ -1,3 +1,7 @@
+## 1.0.7
+
+* add raw response method
+
 ## 1.0.6
 
 * add intl
