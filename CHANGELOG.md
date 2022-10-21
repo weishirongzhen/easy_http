@@ -1,5 +1,9 @@
 ## 1.0.8
 
+* bug fixed
+
+## 1.0.7
+
 * add raw response method
 
 ## 1.0.6
