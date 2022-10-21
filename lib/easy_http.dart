@@ -149,7 +149,7 @@ class EasyHttp {
           onSendProgress: onSendProgress,
           onReceiveProgress: onReceiveProgress,
         );
-        return res.data;
+        return res;
       } catch (e) {
         rethrow;
       }
@@ -241,7 +241,7 @@ class EasyHttp {
           options: Options(headers: headers, contentType: contentType),
           queryParameters: query,
         );
-        return res.data;
+        return res;
       } catch (e) {
         rethrow;
       }
