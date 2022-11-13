@@ -31,11 +31,11 @@ mixin PaginationMixin<R> {
     _total.value = value;
   }
 
-  void refreshList() async {
+  void refreshList({int? wantPageSize}) async {
     try {
       currentPageNumber = defaultStartPage;
       _readCache();
-      paginateDataList.value = await requestPaginateData(currentPageNumber, defaultPageSize, (t) {
+      paginateDataList.value = await requestPaginateData(currentPageNumber, wantPageSize ?? defaultPageSize, (t) {
         total = t;
       });
       _writeCache();
