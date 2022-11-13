@@ -1,3 +1,7 @@
+## 1.0.9
+
+* Feature: can set pageSize when refreshList
+
 ## 1.0.8
 
 * bug fixed
