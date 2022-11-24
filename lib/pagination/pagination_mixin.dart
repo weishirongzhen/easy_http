@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import '../easy_http.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 mixin PaginationMixin<R> {
   RefreshController getRefreshController({bool initialRefresh = false}) {
@@ -43,11 +42,14 @@ mixin PaginationMixin<R> {
       _refreshController!.refreshCompleted(resetFooterState: true);
       if (paginateDataList.length == total) {
         _refreshController!.loadNoData();
+        noMoreDataCallBack();
       }
     } catch (e, s) {
       _refreshController!.refreshFailed();
     }
   }
+
+  void noMoreDataCallBack(){}
 
   void loadMore() async {
     try {
