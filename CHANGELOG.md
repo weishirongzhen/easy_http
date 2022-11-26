@@ -1,3 +1,7 @@
+## 1.0.11
+
+* User can modify itemCount if needed
+
 ## 1.0.10
 
 * add pagination no more data call back
