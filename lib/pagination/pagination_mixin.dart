@@ -42,14 +42,11 @@ mixin PaginationMixin<R> {
       _refreshController!.refreshCompleted(resetFooterState: true);
       if (paginateDataList.length == total) {
         _refreshController!.loadNoData();
-        noMoreDataCallBack();
       }
     } catch (e, s) {
       _refreshController!.refreshFailed();
     }
   }
-
-  void noMoreDataCallBack(){}
 
   void loadMore() async {
     try {

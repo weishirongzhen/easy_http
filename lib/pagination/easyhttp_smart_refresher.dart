@@ -11,6 +11,7 @@ class ListSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
   final Widget? emptyWidget;
   final Widget? header;
   final Widget? footer;
+  final int? itemCount;
 
   const ListSmartRefresher({
     Key? key,
@@ -22,6 +23,7 @@ class ListSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
     this.emptyWidget,
     this.header,
     this.footer,
+    this.itemCount,
   }) : super(key: key);
 
   @override
@@ -44,13 +46,13 @@ class ListSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
                 ? ListView.builder(
                     padding: padding,
                     itemBuilder: itemBuilder,
-                    itemCount: controller.paginateDataList.length,
+                    itemCount: itemCount ?? controller.paginateDataList.length,
                   )
                 : ListView.separated(
                     padding: padding,
                     itemBuilder: itemBuilder,
                     separatorBuilder: separatorBuilder!,
-                    itemCount: controller.paginateDataList.length,
+                    itemCount: itemCount ?? controller.paginateDataList.length,
                   )),
       );
     });
@@ -66,6 +68,7 @@ class GridSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
   final Widget? emptyWidget;
   final Widget? header;
   final Widget? footer;
+  final int? itemCount;
 
   const GridSmartRefresher({
     Key? key,
@@ -77,6 +80,7 @@ class GridSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
     this.emptyWidget,
     this.header,
     this.footer,
+    this.itemCount,
   }) : super(key: key);
 
   @override
@@ -98,7 +102,7 @@ class GridSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
             : GridView.builder(
                 padding: padding,
                 itemBuilder: itemBuilder,
-                itemCount: controller.paginateDataList.length,
+                itemCount: itemCount??controller.paginateDataList.length,
                 gridDelegate: gridDelegate,
               ),
       );
