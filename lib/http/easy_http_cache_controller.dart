@@ -1,5 +1,6 @@
+import 'dart:developer';
+
 import '../easy_http.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'easy_http_connect.dart';
 
 abstract class EasyHttpCacheController<T> extends GetxController with StateMixin<T> {
@@ -185,7 +186,9 @@ abstract class EasyHttpCacheController<T> extends GetxController with StateMixin
 
   void onSuccess() {}
 
-  void onError([String? message]) {}
+  void onError([String? message]) {
+    log("EasyHttp error: $message");
+  }
 
   void deleteCache() {
     EasyHttp.config.cacheRunner.deleteCache(simpleCacheKey);
