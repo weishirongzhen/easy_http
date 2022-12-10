@@ -1,3 +1,7 @@
+## 1.0.12
+
+* Add error log
+
 ## 1.0.11
 
 * User can modify itemCount if needed
