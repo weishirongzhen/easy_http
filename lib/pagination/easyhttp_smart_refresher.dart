@@ -59,6 +59,77 @@ class ListSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
   }
 }
 
+class ListSmartRefresherWithFixedTopItem<T extends PaginationMixin> extends StatelessWidget {
+  final T controller;
+  final IndexedWidgetBuilder itemBuilder;
+  final IndexedWidgetBuilder? separatorBuilder;
+  final EdgeInsetsGeometry? padding;
+  final bool initialRefresh;
+  final Widget? emptyWidget;
+  final Widget? header;
+  final Widget? footer;
+  final Widget topItem;
+  final int? itemCount;
+
+  const ListSmartRefresherWithFixedTopItem({
+    Key? key,
+    required this.controller,
+    required this.itemBuilder,
+    this.separatorBuilder,
+    this.padding,
+    this.initialRefresh = true,
+    this.emptyWidget,
+    this.header,
+    this.footer,
+    this.itemCount,
+    required this.topItem,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      return SmartRefresher(
+        controller: controller.getRefreshController(initialRefresh: initialRefresh),
+        enablePullDown: true,
+        physics: const ClampingScrollPhysics(),
+        enablePullUp: true,
+        onRefresh: controller.refreshList,
+        onLoading: () {
+          controller.loadMore();
+        },
+        header: header ?? const ClassicHeader(),
+        footer: footer,
+        child: controller.paginateDataList.isEmpty
+            ? emptyWidget ?? const SizedBox()
+            : (separatorBuilder == null
+                ? ListView.builder(
+                    padding: padding,
+                    itemBuilder: (context, index) {
+                      if (index == 0) {
+                        return topItem;
+                      } else {
+                        return itemBuilder(context, index);
+                      }
+                    },
+                    itemCount: (itemCount ?? controller.paginateDataList.length) + 1,
+                  )
+                : ListView.separated(
+                    padding: padding,
+                    itemBuilder: (context, index) {
+                      if (index == 0) {
+                        return topItem;
+                      } else {
+                        return itemBuilder(context, index);
+                      }
+                    },
+                    separatorBuilder: separatorBuilder!,
+                    itemCount: (itemCount ?? controller.paginateDataList.length) + 1,
+                  )),
+      );
+    });
+  }
+}
+
 class GridSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
   final T controller;
   final IndexedWidgetBuilder itemBuilder;
@@ -102,7 +173,7 @@ class GridSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
             : GridView.builder(
                 padding: padding,
                 itemBuilder: itemBuilder,
-                itemCount: itemCount??controller.paginateDataList.length,
+                itemCount: itemCount ?? controller.paginateDataList.length,
                 gridDelegate: gridDelegate,
               ),
       );
