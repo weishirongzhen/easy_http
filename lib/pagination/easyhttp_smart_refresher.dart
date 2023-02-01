@@ -1,6 +1,5 @@
 import '../easy_http.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ListSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
   final T controller;
@@ -99,32 +98,30 @@ class ListSmartRefresherWithFixedTopItem<T extends PaginationMixin> extends Stat
         },
         header: header ?? const ClassicHeader(),
         footer: footer,
-        child: controller.paginateDataList.isEmpty
-            ? emptyWidget ?? const SizedBox()
-            : (separatorBuilder == null
-                ? ListView.builder(
-                    padding: padding,
-                    itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return topItem;
-                      } else {
-                        return itemBuilder(context, index);
-                      }
-                    },
-                    itemCount: (itemCount ?? controller.paginateDataList.length) + 1,
-                  )
-                : ListView.separated(
-                    padding: padding,
-                    itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return topItem;
-                      } else {
-                        return itemBuilder(context, index);
-                      }
-                    },
-                    separatorBuilder: separatorBuilder!,
-                    itemCount: (itemCount ?? controller.paginateDataList.length) + 1,
-                  )),
+        child: separatorBuilder == null
+            ? ListView.builder(
+                padding: padding,
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return topItem;
+                  } else {
+                    return itemBuilder(context, index);
+                  }
+                },
+                itemCount: (itemCount ?? controller.paginateDataList.length) + 1,
+              )
+            : ListView.separated(
+                padding: padding,
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return topItem;
+                  } else {
+                    return itemBuilder(context, index);
+                  }
+                },
+                separatorBuilder: separatorBuilder!,
+                itemCount: (itemCount ?? controller.paginateDataList.length) + 1,
+              ),
       );
     });
   }

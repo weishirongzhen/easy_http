@@ -1,3 +1,11 @@
+## 1.0.14
+
+* bug fixed
+
+## 1.0.13
+
+* Add fix top item support
+
 ## 1.0.12
 
 * Add error log
