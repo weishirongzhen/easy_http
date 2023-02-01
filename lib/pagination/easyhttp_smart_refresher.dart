@@ -67,7 +67,7 @@ class ListSmartRefresherWithFixedTopItem<T extends PaginationMixin> extends Stat
   final Widget? emptyWidget;
   final Widget? header;
   final Widget? footer;
-  final Widget topItem;
+  final Widget? topItem;
   final int? itemCount;
 
   const ListSmartRefresherWithFixedTopItem({
@@ -86,44 +86,21 @@ class ListSmartRefresherWithFixedTopItem<T extends PaginationMixin> extends Stat
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return SmartRefresher(
-        controller: controller.getRefreshController(initialRefresh: initialRefresh),
-        enablePullDown: true,
-        physics: const ClampingScrollPhysics(),
-        enablePullUp: true,
-        onRefresh: controller.refreshList,
-        onLoading: () {
-          controller.loadMore();
-        },
-        header: header ?? const ClassicHeader(),
-        footer: footer,
-        child: separatorBuilder == null
-            ? ListView.builder(
-                padding: padding,
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return topItem;
-                  } else {
-                    return itemBuilder(context, index);
-                  }
-                },
-                itemCount: (itemCount ?? controller.paginateDataList.length) + 1,
-              )
-            : ListView.separated(
-                padding: padding,
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return topItem;
-                  } else {
-                    return itemBuilder(context, index);
-                  }
-                },
-                separatorBuilder: separatorBuilder!,
-                itemCount: (itemCount ?? controller.paginateDataList.length) + 1,
-              ),
-      );
-    });
+    return CustomSmartRefresh(
+      initialRefresh: initialRefresh,
+      controller: controller,
+      child: CustomScrollView(
+        slivers: [
+          topItem!.sliverBox,
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              itemBuilder,
+              childCount: itemCount ?? controller.paginateDataList.length,
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
 
@@ -186,6 +163,7 @@ class CustomSmartRefresh<T extends PaginationMixin> extends StatelessWidget {
   final Widget child;
   final Widget? header;
   final Widget? footer;
+  final bool hasTopItem;
 
   const CustomSmartRefresh({
     Key? key,
@@ -196,6 +174,7 @@ class CustomSmartRefresh<T extends PaginationMixin> extends StatelessWidget {
     required this.child,
     this.header,
     this.footer,
+    this.hasTopItem = false,
   }) : super(key: key);
 
   @override
@@ -211,7 +190,7 @@ class CustomSmartRefresh<T extends PaginationMixin> extends StatelessWidget {
       },
       header: header ?? const ClassicHeader(),
       footer: footer,
-      child: controller.paginateDataList.isEmpty ? emptyWidget ?? const SizedBox() : child,
+      child: hasTopItem ? child : (controller.paginateDataList.isEmpty ? emptyWidget ?? const SizedBox() : child),
     );
   }
 }
