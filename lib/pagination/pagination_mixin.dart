@@ -30,7 +30,7 @@ mixin PaginationMixin<R> {
     _total.value = value;
   }
 
-  void refreshList({int? wantPageSize}) async {
+  Future<void> refreshList({int? wantPageSize}) async {
     try {
       currentPageNumber = defaultStartPage;
       _readCache();
