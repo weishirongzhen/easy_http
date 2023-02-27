@@ -39,12 +39,12 @@ mixin PaginationMixin<R> {
       });
       _writeCache();
 
-      _refreshController!.refreshCompleted(resetFooterState: true);
+      _refreshController?.refreshCompleted(resetFooterState: true);
       if (paginateDataList.length == total) {
-        _refreshController!.loadNoData();
+        _refreshController?.loadNoData();
       }
     } catch (e, s) {
-      _refreshController!.refreshFailed();
+      _refreshController?.refreshFailed();
     }
   }
 
@@ -58,12 +58,12 @@ mixin PaginationMixin<R> {
 
       _writeCache();
       if (paginateDataList.length == total) {
-        _refreshController!.loadNoData();
+        _refreshController?.loadNoData();
       } else {
-        _refreshController!.loadComplete();
+        _refreshController?.loadComplete();
       }
     } catch (e, s) {
-      _refreshController!.refreshFailed();
+      _refreshController?.refreshFailed();
     }
   }
 
