@@ -30,7 +30,7 @@ mixin PaginationMixin<R> {
     _total.value = value;
   }
 
-  Future<void> refreshList({int? wantPageSize}) async {
+  Future<void> refreshList({int? wantPageSize, Function()? onRefreshEnd}) async {
     try {
       currentPageNumber = defaultStartPage;
       _readCache();
@@ -43,8 +43,14 @@ mixin PaginationMixin<R> {
       if (paginateDataList.length == total) {
         _refreshController?.loadNoData();
       }
+      if (onRefreshEnd != null) {
+        onRefreshEnd();
+      }
     } catch (e, s) {
       _refreshController?.refreshFailed();
+      if (onRefreshEnd != null) {
+        onRefreshEnd();
+      }
     }
   }
 
