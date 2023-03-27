@@ -1,5 +1,4 @@
 import 'package:easy_http/easy_http.dart';
-import 'package:easy_http/pagination/easyhttp_smart_refresher.dart';
 import 'package:example/controller/task_list_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -7,20 +6,20 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 class PaginationCustomViewPage extends StatelessWidget {
   const PaginationCustomViewPage({Key? key}) : super(key: key);
 
-  TaskListController get taskListController => Get.find();
+  UsersController get usersController => Get.find();
 
   @override
   Widget build(BuildContext context) {
-    Get.put(TaskListController());
+    Get.put(UsersController());
     return Scaffold(
       appBar: AppBar(
         title: const Text("Pagination List"),
       ),
       body: Obx(() {
         return CustomSmartRefresh(
-          controller: taskListController,
+          controller: usersController,
           child: MasonryGridView.count(
-            itemCount: taskListController.paginateDataList.length,
+            itemCount: usersController.paginateDataList.length,
             crossAxisCount: 4,
             mainAxisSpacing: 4,
             crossAxisSpacing: 4,

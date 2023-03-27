@@ -23,13 +23,13 @@ abstract class EasyHttpCacheController<T> extends GetxController with StateMixin
   /// if want to enable cache, override localCacheKey and give localCacheKey a not-empty value. else leave it empty
   String get simpleCacheKey => "";
 
-  int get timeoutInMillSecond => 100000;
+  Duration get timeout => const Duration(milliseconds: 10000);
 
   String get requestUrl;
 
   @override
   void onInit() {
-    _httpClient = EasyHttpClient<T>(initHttpResponseData, localCacheKey: simpleCacheKey, timeout: timeoutInMillSecond);
+    _httpClient = EasyHttpClient<T>(initHttpResponseData, localCacheKey: simpleCacheKey, timeout: timeout);
     super.onInit();
   }
 

@@ -8,7 +8,7 @@ class EasyHttpClient<T> {
 
   /// leave empty will disable local cache
   final String localCacheKey;
-  final int timeout;
+  final Duration timeout;
 
   late final Rx<T> _httpData = Rx<T>(initData);
 
@@ -18,7 +18,7 @@ class EasyHttpClient<T> {
 
   late Dio dio;
 
-  EasyHttpClient(this.initData, {this.localCacheKey = "", this.timeout = 100000}) {
+  EasyHttpClient(this.initData, {this.localCacheKey = "", this.timeout = const Duration(seconds: 10)}) {
     dio = Dio();
     dio.options.connectTimeout = timeout;
     dio.options.receiveTimeout = timeout;

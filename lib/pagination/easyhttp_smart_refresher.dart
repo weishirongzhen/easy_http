@@ -195,42 +195,6 @@ class CustomSmartRefresh<T extends PaginationMixin> extends StatelessWidget {
   }
 }
 
-class BasicSmartRefresh<T extends EasyHttpCacheController> extends StatelessWidget {
-  final T controller;
-  final EdgeInsetsGeometry? padding;
-  final bool initialRefresh;
-  final Widget? emptyWidget;
-  final Widget child;
-  final Widget? header;
-  final Widget? footer;
-
-  const BasicSmartRefresh({
-    Key? key,
-    required this.controller,
-    this.padding,
-    this.initialRefresh = true,
-    this.emptyWidget,
-    required this.child,
-    this.header,
-    this.footer,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SmartRefresher(
-      controller: controller.getRefreshController(initialRefresh: initialRefresh),
-      enablePullDown: true,
-      physics: const ClampingScrollPhysics(),
-      enablePullUp: false,
-      onRefresh: controller.refreshData,
-      header: header ?? const ClassicHeader(),
-      footer: footer,
-      child: child,
-    );
-  }
-}
-
-/// no use
 CustomFooter getDefaultFooter({
   String? idle,
   String? loading,
