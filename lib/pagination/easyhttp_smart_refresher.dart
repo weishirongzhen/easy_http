@@ -42,17 +42,17 @@ class ListSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
         child: controller.paginateDataList.isEmpty
             ? emptyWidget ?? const SizedBox()
             : (separatorBuilder == null
-                ? ListView.builder(
-                    padding: padding,
-                    itemBuilder: itemBuilder,
-                    itemCount: itemCount ?? controller.paginateDataList.length,
-                  )
-                : ListView.separated(
-                    padding: padding,
-                    itemBuilder: itemBuilder,
-                    separatorBuilder: separatorBuilder!,
-                    itemCount: itemCount ?? controller.paginateDataList.length,
-                  )),
+            ? ListView.builder(
+          padding: padding,
+          itemBuilder: itemBuilder,
+          itemCount: itemCount ?? controller.paginateDataList.length,
+        )
+            : ListView.separated(
+          padding: padding,
+          itemBuilder: itemBuilder,
+          separatorBuilder: separatorBuilder!,
+          itemCount: itemCount ?? controller.paginateDataList.length,
+        )),
       );
     });
   }
@@ -86,21 +86,23 @@ class ListSmartRefresherWithFixedTopItem<T extends PaginationMixin> extends Stat
 
   @override
   Widget build(BuildContext context) {
-    return CustomSmartRefresh(
-      initialRefresh: initialRefresh,
-      controller: controller,
-      child: CustomScrollView(
-        slivers: [
-          topItem!.sliverBox,
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              itemBuilder,
-              childCount: itemCount ?? controller.paginateDataList.length,
-            ),
-          )
-        ],
-      ),
-    );
+    return Obx(() {
+      return CustomSmartRefresh(
+        initialRefresh: initialRefresh,
+        controller: controller,
+        child: CustomScrollView(
+          slivers: [
+            topItem!.sliverBox,
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                itemBuilder,
+                childCount: itemCount ?? controller.paginateDataList.length,
+              ),
+            )
+          ],
+        ),
+      );
+    });
   }
 }
 
@@ -145,11 +147,11 @@ class GridSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
         child: controller.paginateDataList.isEmpty
             ? emptyWidget ?? const SizedBox()
             : GridView.builder(
-                padding: padding,
-                itemBuilder: itemBuilder,
-                itemCount: itemCount ?? controller.paginateDataList.length,
-                gridDelegate: gridDelegate,
-              ),
+          padding: padding,
+          itemBuilder: itemBuilder,
+          itemCount: itemCount ?? controller.paginateDataList.length,
+          gridDelegate: gridDelegate,
+        ),
       );
     });
   }
