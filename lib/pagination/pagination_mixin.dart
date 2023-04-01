@@ -43,6 +43,7 @@ mixin PaginationMixin<R> {
       if (paginateDataList.length == total) {
         _refreshController?.loadNoData();
       }
+      onRefreshed();
       if (onRefreshEnd != null) {
         onRefreshEnd();
       }
@@ -51,8 +52,11 @@ mixin PaginationMixin<R> {
       if (onRefreshEnd != null) {
         onRefreshEnd();
       }
+      onRefreshed();
     }
   }
+
+  void onRefreshed();
 
   void loadMore() async {
     try {
