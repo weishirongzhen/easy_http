@@ -56,7 +56,7 @@ mixin PaginationMixin<R> {
     }
   }
 
-  void onRefreshed();
+  void onRefreshed() {}
 
   void loadMore() async {
     try {

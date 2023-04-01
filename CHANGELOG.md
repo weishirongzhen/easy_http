@@ -1,3 +1,7 @@
+## 2.0.2
+
+* add onRefreshed callback
+
 ## 2.0.1
 
 * add onRefreshed callback
