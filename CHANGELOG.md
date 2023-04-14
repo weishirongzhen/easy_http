@@ -1,3 +1,7 @@
+## 2.0.3
+
+* add animateToTop()
+
 ## 2.0.2
 
 * add onRefreshed callback

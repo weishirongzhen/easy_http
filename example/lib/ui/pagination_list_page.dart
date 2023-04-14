@@ -15,16 +15,33 @@ class PaginationListPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Pagination List"),
       ),
-      body: ListSmartRefresher(
-        controller: usersController,
-        itemBuilder: (context, index) => ListTile(
-          title: Text("${usersController.paginateDataList[index].firstName} ${usersController.paginateDataList[index].lastName}"),
-        ),
-        separatorBuilder: (_, __) => const Divider(),
-        emptyWidget: const Center(
-          child: Text("no data"),
-        ),
-      ),
+      body: Obx(() {
+        return Stack(
+          children: [
+            ListSmartRefresher(
+              controller: usersController,
+              itemBuilder: (context, index) => ListTile(
+                title: Text("${usersController.paginateDataList[index].firstName} ${usersController.paginateDataList[index].lastName}"),
+              ),
+              separatorBuilder: (_, __) => const Divider(),
+              emptyWidget: const Center(
+                child: Text("no data"),
+              ),
+            ),
+            if (usersController.isScrollDown.isTrue)
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        usersController.animateToTop();
+                      },
+                      child: const Text("top")),
+                ),
+              ),
+          ],
+        );
+      }),
     );
   }
 }

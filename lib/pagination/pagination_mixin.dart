@@ -1,17 +1,31 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
+
 import '../easy_http.dart';
 
 mixin PaginationMixin<R> {
   RefreshController getRefreshController({bool initialRefresh = false}) {
     _refreshController ??= RefreshController(initialRefresh: initialRefresh);
+    scrollController ??= ScrollController();
+    scrollController?.addListener(() {
+      if ((scrollController?.position.pixels ?? 0) > scrollDownOffset) {
+        isScrollDown.value = true;
+      } else {
+        isScrollDown.value = false;
+      }
+    });
+
     return _refreshController!;
   }
 
   /// if want to enable list cache, override paginationCacheKey and give localCacheKey a not-empty value. else leave it empty.
   String get paginationCacheKey => "";
 
+  double get scrollDownOffset => 100;
+
   RefreshController? _refreshController;
+  ScrollController? scrollController;
 
   final paginateDataList = <R>[].obs;
 
@@ -28,6 +42,12 @@ mixin PaginationMixin<R> {
 
   set total(value) {
     _total.value = value;
+  }
+
+  final isScrollDown = false.obs;
+
+  void animateToTop({Duration? duration = const Duration(milliseconds: 100), Curve? curve = Curves.linear}) {
+    scrollController?.animateTo(0, duration: duration!, curve: curve!);
   }
 
   Future<void> refreshList({int? wantPageSize, Function()? onRefreshEnd}) async {
@@ -47,7 +67,7 @@ mixin PaginationMixin<R> {
       if (onRefreshEnd != null) {
         onRefreshEnd();
       }
-    } catch (e, s) {
+    } catch (e, _) {
       _refreshController?.refreshFailed();
       if (onRefreshEnd != null) {
         onRefreshEnd();
@@ -72,7 +92,7 @@ mixin PaginationMixin<R> {
       } else {
         _refreshController?.loadComplete();
       }
-    } catch (e, s) {
+    } catch (e, _) {
       _refreshController?.refreshFailed();
     }
   }

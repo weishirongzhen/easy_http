@@ -30,6 +30,7 @@ class ListSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
     return Obx(() {
       return SmartRefresher(
         controller: controller.getRefreshController(initialRefresh: initialRefresh),
+        scrollController: controller.scrollController,
         enablePullDown: true,
         physics: const ClampingScrollPhysics(),
         enablePullUp: true,
@@ -42,17 +43,17 @@ class ListSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
         child: controller.paginateDataList.isEmpty
             ? emptyWidget ?? const SizedBox()
             : (separatorBuilder == null
-            ? ListView.builder(
-          padding: padding,
-          itemBuilder: itemBuilder,
-          itemCount: itemCount ?? controller.paginateDataList.length,
-        )
-            : ListView.separated(
-          padding: padding,
-          itemBuilder: itemBuilder,
-          separatorBuilder: separatorBuilder!,
-          itemCount: itemCount ?? controller.paginateDataList.length,
-        )),
+                ? ListView.builder(
+                    padding: padding,
+                    itemBuilder: itemBuilder,
+                    itemCount: itemCount ?? controller.paginateDataList.length,
+                  )
+                : ListView.separated(
+                    padding: padding,
+                    itemBuilder: itemBuilder,
+                    separatorBuilder: separatorBuilder!,
+                    itemCount: itemCount ?? controller.paginateDataList.length,
+                  )),
       );
     });
   }
@@ -135,6 +136,7 @@ class GridSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
     return Obx(() {
       return SmartRefresher(
         controller: controller.getRefreshController(initialRefresh: initialRefresh),
+        scrollController: controller.scrollController,
         enablePullDown: true,
         physics: const ClampingScrollPhysics(),
         enablePullUp: true,
@@ -147,11 +149,11 @@ class GridSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
         child: controller.paginateDataList.isEmpty
             ? emptyWidget ?? const SizedBox()
             : GridView.builder(
-          padding: padding,
-          itemBuilder: itemBuilder,
-          itemCount: itemCount ?? controller.paginateDataList.length,
-          gridDelegate: gridDelegate,
-        ),
+                padding: padding,
+                itemBuilder: itemBuilder,
+                itemCount: itemCount ?? controller.paginateDataList.length,
+                gridDelegate: gridDelegate,
+              ),
       );
     });
   }
@@ -183,6 +185,7 @@ class CustomSmartRefresh<T extends PaginationMixin> extends StatelessWidget {
   Widget build(BuildContext context) {
     return SmartRefresher(
       controller: controller.getRefreshController(initialRefresh: initialRefresh),
+      scrollController: controller.scrollController,
       enablePullDown: true,
       physics: const ClampingScrollPhysics(),
       enablePullUp: true,

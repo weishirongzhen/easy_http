@@ -16,20 +16,35 @@ class PaginationCustomViewPage extends StatelessWidget {
         title: const Text("Pagination List"),
       ),
       body: Obx(() {
-        return CustomSmartRefresh(
-          controller: usersController,
-          child: MasonryGridView.count(
-            itemCount: usersController.paginateDataList.length,
-            crossAxisCount: 4,
-            mainAxisSpacing: 4,
-            crossAxisSpacing: 4,
-            itemBuilder: (context, index) {
-              return Tile(
-                index: index,
-                extent: (index % 5 + 1) * 100,
-              );
-            },
-          ),
+        return Stack(
+          children: [
+            CustomSmartRefresh(
+              controller: usersController,
+              child: MasonryGridView.count(
+                itemCount: usersController.paginateDataList.length,
+                crossAxisCount: 4,
+                mainAxisSpacing: 4,
+                crossAxisSpacing: 4,
+                itemBuilder: (context, index) {
+                  return Tile(
+                    index: index,
+                    extent: (index % 5 + 1) * 100,
+                  );
+                },
+              ),
+            ),
+            if (usersController.isScrollDown.isTrue)
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        usersController.animateToTop();
+                      },
+                      child: const Text("top")),
+                ),
+              ),
+          ],
         );
       }),
     );
