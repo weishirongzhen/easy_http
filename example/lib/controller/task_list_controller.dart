@@ -10,15 +10,16 @@ class UsersController extends EasyHttpCacheController<UsersEntity> with Paginati
   @override
   String get requestUrl => API.users;
 
-  @override
-  String get paginationCacheKey => requestUrl;
 
 
   @override
   Future<List<UsersData>> requestPaginateData(int currentPageNumber, int pageSize, Function(int total) setTotal) async {
+    await Future.delayed(const Duration(seconds: 1)); // make request time longer
     final res = await get(query: {"page": currentPageNumber, "per_page": pageSize}, showDefaultLoading: false);
     setTotal(res.total ?? 0);
     return res.data ?? [];
+    // setTotal( 0);
+    // return  [];
   }
 
   @override

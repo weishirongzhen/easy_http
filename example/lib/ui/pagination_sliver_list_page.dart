@@ -20,7 +20,6 @@ class PaginationSliverListPage extends StatelessWidget {
         itemBuilder: (context, index) => ListTile(
           title: Text("${usersController.paginateDataList[index].firstName} ${usersController.paginateDataList[index].lastName}"),
         ),
-        separatorBuilder: (_, __) => const Divider(),
         emptyWidget: const Center(
           child: Text("no data"),
         ),
