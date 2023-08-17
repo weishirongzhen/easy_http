@@ -1,3 +1,7 @@
+## 2.0.5
+
+* cached found will call onSuccess as well
+
 ## 2.0.4
 
 * update to flutter 3.10

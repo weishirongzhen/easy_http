@@ -18,7 +18,7 @@ class EasyHttpClient<T> {
 
   late Dio dio;
 
-  EasyHttpClient(this.initData, {this.localCacheKey = "", this.timeout = const Duration(seconds: 10)}) {
+  EasyHttpClient(this.initData, {this.localCacheKey = "", this.timeout = const Duration(seconds: 10), Function? onSuccessCallback}) {
     dio = Dio();
     dio.options.connectTimeout = timeout;
     dio.options.receiveTimeout = timeout;
@@ -31,6 +31,7 @@ class EasyHttpClient<T> {
         if (cache != null) {
           log("Found cache  ${T.toString()} request url = ${options.uri}");
           _httpData.value = cache;
+          onSuccessCallback?.call();
         } else {
           log("Cache Not Found  ${T.toString()} request url = ${options.uri}");
         }
@@ -40,6 +41,7 @@ class EasyHttpClient<T> {
       if (response.data != null) {
         try {
           _httpData.value = EasyHttp.config.cacheSerializer<T>(response.data) ?? initData;
+          onSuccessCallback?.call();
           if (localCacheKey.isNotEmpty) {
             EasyHttp.config.cacheRunner.writeCache(localCacheKey, _httpData.value);
             log("Updated Cache ${T.toString()} request url = ${response.realUri}");
