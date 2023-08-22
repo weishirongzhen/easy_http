@@ -1,3 +1,8 @@
+## 2.0.6
+
+* box fixed
+
+
 ## 2.0.5
 
 * cached found will call onSuccess as well

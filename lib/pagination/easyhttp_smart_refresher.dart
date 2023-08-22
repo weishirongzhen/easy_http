@@ -91,6 +91,7 @@ class ListSmartRefresherWithFixedTopItem<T extends PaginationMixin> extends Stat
       return CustomSmartRefresh(
         initialRefresh: initialRefresh,
         controller: controller,
+        hasTopItem: true,
         child: CustomScrollView(
           slivers: [
             topItem!.sliverBox,
