@@ -1,3 +1,7 @@
+## 2.0.8
+
+* update deps packages 
+
 ## 2.0.7
 
 * add onCached and onNewDataCallback, instead of onSuccess will fire twice 
