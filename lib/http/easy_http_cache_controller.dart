@@ -29,7 +29,14 @@ abstract class EasyHttpCacheController<T> extends GetxController with StateMixin
 
   @override
   void onInit() {
-    _httpClient = EasyHttpClient<T>(initHttpResponseData, localCacheKey: simpleCacheKey, timeout: timeout, onSuccessCallback: onSuccess);
+    _httpClient = EasyHttpClient<T>(
+      initHttpResponseData,
+      localCacheKey: simpleCacheKey,
+      timeout: timeout,
+      onSuccessCallback: onSuccess,
+      onCacheCallback: onCached,
+      onNewDataCallback: onNewData,
+    );
     super.onInit();
   }
 
@@ -185,6 +192,10 @@ abstract class EasyHttpCacheController<T> extends GetxController with StateMixin
   void onEmpty() {}
 
   void onSuccess() {}
+
+  void onCached(T cache) {}
+
+  void onNewData(T newData) {}
 
   void onError([String? message]) {
     log("EasyHttp error: $message");

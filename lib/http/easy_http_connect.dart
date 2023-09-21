@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:developer';
+
 import '../easy_http.dart' hide Response;
 
 class EasyHttpClient<T> {
@@ -18,7 +18,14 @@ class EasyHttpClient<T> {
 
   late Dio dio;
 
-  EasyHttpClient(this.initData, {this.localCacheKey = "", this.timeout = const Duration(seconds: 10), Function? onSuccessCallback}) {
+  EasyHttpClient(
+    this.initData, {
+    this.localCacheKey = "",
+    this.timeout = const Duration(seconds: 10),
+    Function? onSuccessCallback,
+    Function(T cache)? onCacheCallback,
+    Function(T newData)? onNewDataCallback,
+  }) {
     dio = Dio();
     dio.options.connectTimeout = timeout;
     dio.options.receiveTimeout = timeout;
@@ -32,6 +39,7 @@ class EasyHttpClient<T> {
           log("Found cache  ${T.toString()} request url = ${options.uri}");
           _httpData.value = cache;
           onSuccessCallback?.call();
+          onCacheCallback?.call(cache);
         } else {
           log("Cache Not Found  ${T.toString()} request url = ${options.uri}");
         }
@@ -42,6 +50,8 @@ class EasyHttpClient<T> {
         try {
           _httpData.value = EasyHttp.config.cacheSerializer<T>(response.data) ?? initData;
           onSuccessCallback?.call();
+          onNewDataCallback?.call(_httpData.value);
+
           if (localCacheKey.isNotEmpty) {
             EasyHttp.config.cacheRunner.writeCache(localCacheKey, _httpData.value);
             log("Updated Cache ${T.toString()} request url = ${response.realUri}");

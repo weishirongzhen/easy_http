@@ -1,3 +1,7 @@
+## 2.0.7
+
+* add onCached and onNewDataCallback, instead of onSuccess will fire twice 
+
 ## 2.0.6
 
 * box fixed
