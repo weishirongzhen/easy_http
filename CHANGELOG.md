@@ -1,3 +1,9 @@
+## 2.0.9
+
+* update dart lint
+* update dio version
+
+
 ## 2.0.8
 
 * update deps packages 
