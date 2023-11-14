@@ -13,7 +13,7 @@ class ListSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
   final int? itemCount;
 
   const ListSmartRefresher({
-    Key? key,
+    super.key,
     required this.controller,
     required this.itemBuilder,
     this.separatorBuilder,
@@ -23,7 +23,7 @@ class ListSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
     this.header,
     this.footer,
     this.itemCount,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,7 @@ class ListSmartRefresherWithFixedTopItem<T extends PaginationMixin> extends Stat
   final int? itemCount;
 
   const ListSmartRefresherWithFixedTopItem({
-    Key? key,
+    super.key,
     required this.controller,
     required this.itemBuilder,
     this.separatorBuilder,
@@ -83,7 +83,7 @@ class ListSmartRefresherWithFixedTopItem<T extends PaginationMixin> extends Stat
     this.footer,
     this.itemCount,
     required this.topItem,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +120,7 @@ class GridSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
   final int? itemCount;
 
   const GridSmartRefresher({
-    Key? key,
+    super.key,
     required this.controller,
     required this.itemBuilder,
     this.padding,
@@ -130,7 +130,7 @@ class GridSmartRefresher<T extends PaginationMixin> extends StatelessWidget {
     this.header,
     this.footer,
     this.itemCount,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +171,7 @@ class CustomSmartRefresh<T extends PaginationMixin> extends StatelessWidget {
   final bool hasTopItem;
 
   const CustomSmartRefresh({
-    Key? key,
+    super.key,
     required this.controller,
     this.padding,
     this.initialRefresh = true,
@@ -180,7 +180,7 @@ class CustomSmartRefresh<T extends PaginationMixin> extends StatelessWidget {
     this.header,
     this.footer,
     this.hasTopItem = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

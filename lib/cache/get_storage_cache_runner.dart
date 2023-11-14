@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
+
 import '../cache/base_cache_runner.dart';
 import '../easy_http.dart';
 import 'package:get_storage/get_storage.dart';
@@ -42,7 +44,9 @@ class GetStorageCacheRunner implements BaseCacheRunner {
       try {
         return EasyHttp.config.cacheSerializer<T>(jsonDecode(value));
       } catch (e, s) {
-        log("read type of ${T.runtimeType} cache error", error: e, stackTrace: s);
+        if (kDebugMode) {
+          log("read type of ${T.runtimeType} cache error", error: e, stackTrace: s);
+        }
       }
       return null;
     } else {
@@ -58,7 +62,9 @@ class GetStorageCacheRunner implements BaseCacheRunner {
         /// result of calling `.toJson()` on the unencodable object.
         await gs.write(key, jsonEncode(data));
       } catch (e, s) {
-        log("write type of ${T.runtimeType} cache error", error: e, stackTrace: s);
+        if (kDebugMode) {
+          log("write type of ${T.runtimeType} cache error", error: e, stackTrace: s);
+        }
       }
     } else {
       gs.remove(key);

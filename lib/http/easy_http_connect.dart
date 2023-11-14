@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
+
 import '../easy_http.dart' hide Response;
 
 class EasyHttpClient<T> {
@@ -36,12 +38,16 @@ class EasyHttpClient<T> {
       if (localCacheKey.isNotEmpty) {
         final cache = EasyHttp.config.cacheRunner.readCache<T>(localCacheKey);
         if (cache != null) {
-          log("Found cache  ${T.toString()} request url = ${options.uri}");
+          if (kDebugMode) {
+            log("Found cache  ${T.toString()} request url = ${options.uri}");
+          }
           _httpData.value = cache;
           onSuccessCallback?.call();
           onCacheCallback?.call(cache);
         } else {
-          log("Cache Not Found  ${T.toString()} request url = ${options.uri}");
+          if (kDebugMode) {
+            log("Cache Not Found  ${T.toString()} request url = ${options.uri}");
+          }
         }
       }
       return handler.next(options);
@@ -54,14 +60,18 @@ class EasyHttpClient<T> {
 
           if (localCacheKey.isNotEmpty) {
             EasyHttp.config.cacheRunner.writeCache(localCacheKey, _httpData.value);
-            log("Updated Cache ${T.toString()} request url = ${response.realUri}");
+            if (kDebugMode) {
+              log("Updated Cache ${T.toString()} request url = ${response.realUri}");
+            }
           }
         } catch (e, s) {
-          log("cacheSerializer error by type ${T.toString()}  request url = ${response.realUri}}", error: e, stackTrace: s);
+          if (kDebugMode) {
+            log("cacheSerializer error by type ${T.toString()}  request url = ${response.realUri}}", error: e, stackTrace: s);
+          }
         }
       }
       return handler.next(response); // continue
-    }, onError: (DioError e, handler) {
+    }, onError: (DioException e, handler) {
       return handler.next(e); //continue
     }));
   }
