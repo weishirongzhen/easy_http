@@ -1,3 +1,9 @@
+## 2.0.10
+
+* add delete data param
+
+
+
 ## 2.0.9
 
 * update dart lint

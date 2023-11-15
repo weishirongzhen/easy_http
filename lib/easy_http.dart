@@ -209,7 +209,9 @@ class EasyHttp {
     Map<String, String>? headers,
     String? contentType,
     Map<String, dynamic>? query,
+    dynamic data,
     bool showDefaultLoading = true,
+
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
     return onLoading(() async {
@@ -218,6 +220,7 @@ class EasyHttp {
           url,
           options: Options(headers: headers, contentType: contentType),
           queryParameters: query,
+          data: data,
         );
         return T.toString() == "dynamic" ? res.data : EasyHttp.config.cacheSerializer<T>(res.data);
       } catch (e) {
@@ -231,6 +234,7 @@ class EasyHttp {
     Map<String, String>? headers,
     String? contentType,
     Map<String, dynamic>? query,
+    dynamic data,
     bool showDefaultLoading = true,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
@@ -240,6 +244,7 @@ class EasyHttp {
           url,
           options: Options(headers: headers, contentType: contentType),
           queryParameters: query,
+          data: data
         );
         return res;
       } catch (e) {
