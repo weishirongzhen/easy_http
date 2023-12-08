@@ -50,8 +50,11 @@ mixin PaginationMixin<R> {
     scrollController?.animateTo(0, duration: duration!, curve: curve!);
   }
 
-  Future<void> refreshList({int? wantPageSize, Function()? onRefreshEnd}) async {
+  Future<void> refreshList({int? wantPageSize, Function()? onRefreshEnd, bool showRefresh = true}) async {
     try {
+      if (true) {
+        _refreshController?.requestRefresh();
+      }
       currentPageNumber = defaultStartPage;
       _readCache();
       paginateDataList.value = await requestPaginateData(currentPageNumber, wantPageSize ?? defaultPageSize, (t) {

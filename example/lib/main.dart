@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_http/config/default_easy_http_config.dart';
 import 'package:easy_http/easy_http.dart';
 import 'package:example/generated/json/base/json_convert_content.dart';
@@ -13,6 +15,7 @@ void main() async {
   ) {
     handler.next(e);
   }, onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
+    log("send request ${options.uri}");
     return handler.next(options);
   }, onResponse: (Response e, ResponseInterceptorHandler handler) {
     return handler.next(e);

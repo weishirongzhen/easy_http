@@ -1,27 +1,27 @@
+## 2.0.11
+
+* fixed refreshList() do not trigger ui refresh
+
 ## 2.0.10
 
 * add delete data param
-
-
 
 ## 2.0.9
 
 * update dart lint
 * update dio version
 
-
 ## 2.0.8
 
-* update deps packages 
+* update deps packages
 
 ## 2.0.7
 
-* add onCached and onNewDataCallback, instead of onSuccess will fire twice 
+* add onCached and onNewDataCallback, instead of onSuccess will fire twice
 
 ## 2.0.6
 
 * box fixed
-
 
 ## 2.0.5
 
@@ -30,7 +30,6 @@
 ## 2.0.4
 
 * update to flutter 3.10
-
 
 ## 2.0.3
 
@@ -52,11 +51,9 @@
 
 * bug fixed
 
-
 ## 1.0.17
 
 * bug fixed
-
 
 ## 1.0.16
 
@@ -85,7 +82,6 @@
 ## 1.0.10
 
 * add pagination no more data call back
-
 
 ## 1.0.9
 

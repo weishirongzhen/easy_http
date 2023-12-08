@@ -14,6 +14,11 @@ class PaginationListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Pagination List"),
+        actions: [IconButton(onPressed: () {
+
+          usersController.refreshList();
+
+        }, icon: const Icon(Icons.refresh))],
       ),
       body: Obx(() {
         return Stack(
