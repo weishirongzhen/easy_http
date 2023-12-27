@@ -1,3 +1,7 @@
+## 2.0.12
+
+* Break change! change callback name "onCached" to "onCacheFound"
+
 ## 2.0.11
 
 * fixed refreshList() do not trigger ui refresh
