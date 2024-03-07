@@ -10,8 +10,6 @@ class UsersController extends EasyHttpCacheController<UsersEntity> with Paginati
   @override
   String get requestUrl => API.users;
 
-
-
   @override
   Future<List<UsersData>> requestPaginateData(int currentPageNumber, int pageSize, Function(int total) setTotal) async {
     await Future.delayed(const Duration(seconds: 1)); // make request time longer
@@ -27,5 +25,4 @@ class UsersController extends EasyHttpCacheController<UsersEntity> with Paginati
 
   @override
   get defaultPageSize => 5;
-
 }

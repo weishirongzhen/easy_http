@@ -21,8 +21,6 @@ class EasyHttp {
 
   static late BaseEasyHttpConfig _config;
 
-  static Map<String, EasyHttp> instanceNameMap = {};
-
   static final List<Interceptor> _interceptor = [];
 
   static List<Interceptor> get interceptor => _interceptor;
@@ -31,11 +29,8 @@ class EasyHttp {
 
   static BaseEasyHttpConfig get config => _config;
 
-  static init({required BaseEasyHttpConfig config, String? tag}) async {
+  static init({required BaseEasyHttpConfig config}) async {
     await config.init();
-    // if (tag != null && tag.isNotEmpty) {
-    //   instanceNameMap[tag] = EasyHttp._(config);
-    // }
     _instance ??= EasyHttp._(config);
   }
 
@@ -44,30 +39,28 @@ class EasyHttp {
     _dio.interceptors.add(interceptor);
   }
 
-  static EasyHttp? findByTag(String tag) {
-    return instanceNameMap[tag];
-  }
-
-  static EasyHttp? removeByTag(String tag) {
-    return instanceNameMap.remove(tag);
-  }
-
   static Future<T> get<T>({
     required String url,
     Map<String, String>? headers,
     String? contentType,
     Map<String, dynamic>? query,
     bool showDefaultLoading = true,
+    Duration? sendTimeout,
+    Duration? receiveTimeout,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
     return onLoading(() async {
       try {
-        final res = await _dio.get(url,
-            options: Options(
-              headers: headers,
-              contentType: contentType,
-            ),
-            queryParameters: query);
+        final res = await _dio.get(
+          url,
+          options: Options(
+            headers: headers,
+            contentType: contentType,
+            sendTimeout: sendTimeout,
+            receiveTimeout: receiveTimeout,
+          ),
+          queryParameters: query,
+        );
 
         return T.toString() == "dynamic" ? res.data : EasyHttp.config.cacheSerializer<T>(res.data);
       } catch (e) {
@@ -82,16 +75,22 @@ class EasyHttp {
     String? contentType,
     Map<String, dynamic>? query,
     bool showDefaultLoading = true,
+    Duration? sendTimeout,
+    Duration? receiveTimeout,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
     return onLoading(() async {
       try {
-        final res = await _dio.get(url,
-            options: Options(
-              headers: headers,
-              contentType: contentType,
-            ),
-            queryParameters: query);
+        final res = await _dio.get(
+          url,
+          options: Options(
+            headers: headers,
+            contentType: contentType,
+            sendTimeout: sendTimeout,
+            receiveTimeout: receiveTimeout,
+          ),
+          queryParameters: query,
+        );
 
         return res;
       } catch (e) {
@@ -109,6 +108,8 @@ class EasyHttp {
     bool showDefaultLoading = true,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
+    Duration? sendTimeout,
+    Duration? receiveTimeout,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
     return onLoading(() async {
@@ -116,7 +117,12 @@ class EasyHttp {
         final res = await _dio.post(
           url,
           data: body,
-          options: Options(headers: headers, contentType: contentType),
+          options: Options(
+            headers: headers,
+            contentType: contentType,
+            sendTimeout: sendTimeout,
+            receiveTimeout: receiveTimeout,
+          ),
           queryParameters: query,
           onSendProgress: onSendProgress,
           onReceiveProgress: onReceiveProgress,
@@ -137,6 +143,8 @@ class EasyHttp {
     bool showDefaultLoading = true,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
+    Duration? sendTimeout,
+    Duration? receiveTimeout,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
     return onLoading(() async {
@@ -144,7 +152,12 @@ class EasyHttp {
         final res = await _dio.post(
           url,
           data: body,
-          options: Options(headers: headers, contentType: contentType),
+          options: Options(
+            headers: headers,
+            contentType: contentType,
+            sendTimeout: sendTimeout,
+            receiveTimeout: receiveTimeout,
+          ),
           queryParameters: query,
           onSendProgress: onSendProgress,
           onReceiveProgress: onReceiveProgress,
@@ -163,6 +176,8 @@ class EasyHttp {
     Map<String, String>? headers,
     Map<String, dynamic>? query,
     bool showDefaultLoading = true,
+    Duration? sendTimeout,
+    Duration? receiveTimeout,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
     return onLoading(() async {
@@ -170,7 +185,12 @@ class EasyHttp {
         final res = await _dio.put(
           url,
           data: body,
-          options: Options(headers: headers, contentType: contentType),
+          options: Options(
+            headers: headers,
+            contentType: contentType,
+            sendTimeout: sendTimeout,
+            receiveTimeout: receiveTimeout,
+          ),
           queryParameters: query,
         );
         return T.toString() == "dynamic" ? res.data : EasyHttp.config.cacheSerializer<T>(res.data);
@@ -187,6 +207,8 @@ class EasyHttp {
     Map<String, String>? headers,
     Map<String, dynamic>? query,
     bool showDefaultLoading = true,
+    Duration? sendTimeout,
+    Duration? receiveTimeout,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
     return onLoading(() async {
@@ -194,7 +216,12 @@ class EasyHttp {
         final res = await _dio.put(
           url,
           data: body,
-          options: Options(headers: headers, contentType: contentType),
+          options: Options(
+            headers: headers,
+            contentType: contentType,
+            sendTimeout: sendTimeout,
+            receiveTimeout: receiveTimeout,
+          ),
           queryParameters: query,
         );
         return res;
@@ -211,14 +238,20 @@ class EasyHttp {
     Map<String, dynamic>? query,
     dynamic data,
     bool showDefaultLoading = true,
-
+    Duration? sendTimeout,
+    Duration? receiveTimeout,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
     return onLoading(() async {
       try {
         final res = await _dio.delete(
           url,
-          options: Options(headers: headers, contentType: contentType),
+          options: Options(
+            headers: headers,
+            contentType: contentType,
+            sendTimeout: sendTimeout,
+            receiveTimeout: receiveTimeout,
+          ),
           queryParameters: query,
           data: data,
         );
@@ -236,15 +269,22 @@ class EasyHttp {
     Map<String, dynamic>? query,
     dynamic data,
     bool showDefaultLoading = true,
+    Duration? sendTimeout,
+    Duration? receiveTimeout,
   }) {
     if (_instance == null) throw Exception('Please call "EasyHttp.init(config)" first.');
     return onLoading(() async {
       try {
         final res = await _dio.delete(
           url,
-          options: Options(headers: headers, contentType: contentType),
+          options: Options(
+            headers: headers,
+            contentType: contentType,
+            sendTimeout: sendTimeout,
+            receiveTimeout: receiveTimeout,
+          ),
           queryParameters: query,
-          data: data
+          data: data,
         );
         return res;
       } catch (e) {

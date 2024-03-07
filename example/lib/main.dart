@@ -10,7 +10,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 void main() async {
   await EasyHttp.init(config: DefaultEasyHttpConfig(JsonConvert.fromJsonAsT));
   EasyHttp.addInterceptor(InterceptorsWrapper(onError: (
-    DioError e,
+    DioException e,
     ErrorInterceptorHandler handler,
   ) {
     handler.next(e);
