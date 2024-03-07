@@ -1,3 +1,7 @@
+## 2.0.13
+
+* Add base timeout support on EasyHttp.get/post/put/delete
+
 ## 2.0.12
 
 * Break change! change callback name "onCached" to "onCacheFound"
