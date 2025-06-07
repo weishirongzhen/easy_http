@@ -1,6 +1,6 @@
 name: easy_http
 description: A Flutter Http lib for easy cache and update UI bind with Getx.
-version: 3.0.0
+version: 3.0.1
 homepage: https://github.com/weishirongzhen/easy_http.git
 #publish_to: https://pub.dev
 

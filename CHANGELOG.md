@@ -1,3 +1,7 @@
+## 3.0.1
+
+* adapt to web
+
 ## 2.0.13
 
 * Update deps version

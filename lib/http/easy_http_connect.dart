@@ -1,8 +1,12 @@
 import 'dart:developer';
 
+import 'package:dio/browser.dart';
+import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
 
 import '../easy_http.dart' hide Response;
+
+
 
 class EasyHttpClient<T> {
   /// http response init data, use for initial _httpData obs value
@@ -21,6 +25,8 @@ class EasyHttpClient<T> {
 
   late Dio dio;
 
+
+
   EasyHttpClient(
     this.initData, {
     this.localCacheKey = "",
@@ -35,7 +41,11 @@ class EasyHttpClient<T> {
     dio.options.receiveTimeout = receiveTimeout;
     dio.interceptors.clear();
     dio.interceptors.addAll(EasyHttp.interceptor);
-
+    if (kIsWeb) {
+      dio.httpClientAdapter = BrowserHttpClientAdapter();
+    } else {
+      dio.httpClientAdapter = IOHttpClientAdapter();
+    }
     dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
       if (localCacheKey.isNotEmpty) {
         final cache = EasyHttp.config.cacheRunner.readCache<T>(localCacheKey);
